@@ -9,10 +9,14 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
+<<<<<<< HEAD
+    "express": "^4.16.2",
+=======
     "body-parser": "^1.18.2",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "firebase": "^4.8.0",
+>>>>>>> 4f3c1f8856338e04216a12c4cc01f0779fe48c2a
     "firebase-admin": "~5.4.2",
     "firebase-functions": "^0.7.1"
   },
