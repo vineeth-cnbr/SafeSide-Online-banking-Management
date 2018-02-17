@@ -27,14 +27,16 @@
             </div>
             <div class="card-content grey lighten-4">
               <div id="test4">
-                <form action="">
-
+                <form action="/loginsubmit" method="POST">
+                  <input type="text" name="email" placeholder="Email Id / username">
+                  <input type="password" name="pass" placeholder="Password">
+                  <button class="btn" style="background-color:#607D8B" type="submit">Log In</button>
                 </form>
               </div>
               <div id="test5">
                 <form action="/signupsubmit" method ="POST">
                   <input type="text" name="name" placeholder="Name">
-                  <input type="text" name="email" placeholder="Email Id">
+                  <input type="email" name="email" placeholder="Email Id">
                   <input type="password" name="pass" placeholder="Password">
                   <button class="btn" style="background-color:#607D8B" type="submit">Sign Up</button>
                 </form>
