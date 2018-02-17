@@ -15,7 +15,7 @@ app.get("/hi", (req, res) => {
 
 app.post("/signupsubmit", function (req,res) {
 	admin.auth().createUser({
-	name: req,body.name,
+	name: req.body.name,
 	email: req.body.email,
 	emailVerified: false,
 	password: req.body.pass
