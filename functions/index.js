@@ -49,7 +49,7 @@ app.post("/loginsubmit", function (req,res) {
 	var username = req.body.email;
 	var password = req.body.pass;
 	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-  		// Handle Errors here. e we need firebase.initializeApp also then
+  		// Handle Errors here. 
 
   		var errorCode = error.code;
   		var errorMessage = error.message;
