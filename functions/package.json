@@ -11,6 +11,9 @@
   "dependencies": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 962e999a5b458a4a84a42245f726b1f4c41e6038
     "express": "^4.16.2",
 =======
     "body-parser": "^1.18.2",
@@ -18,9 +21,12 @@
     "express": "^4.16.2",
     "firebase": "^4.8.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "firebase-admin":"~5.5.0",
     "firebase-functions": "^0.7.5"
 =======
+=======
+>>>>>>> 962e999a5b458a4a84a42245f726b1f4c41e6038
 >>>>>>> 4f3c1f8856338e04216a12c4cc01f0779fe48c2a
     "firebase-admin": "~5.4.2",
     "firebase-functions": "^0.7.1"
