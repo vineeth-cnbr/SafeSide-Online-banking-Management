@@ -10,6 +10,7 @@
   },
   "dependencies": {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "express": "^4.16.2",
 =======
     "body-parser": "^1.18.2",
@@ -24,6 +25,11 @@
     "firebase-admin": "~5.4.2",
     "firebase-functions": "^0.7.1"
 >>>>>>> 962e999a5b458a4a84a42245f726b1f4c41e6038
+=======
+    "express": "^4.16.2",
+    "firebase-admin": "~5.4.2",
+    "firebase-functions": "^0.7.1"
+>>>>>>> vineeth
   },
   "private": true
 }
