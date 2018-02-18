@@ -27,19 +27,18 @@
             </div>
             <div class="card-content grey lighten-4">
               <div id="test4">
-                <form action="/loginsubmit" method="POST">
-                  <input type="text" name="email" placeholder="Email Id / username">
-                  <input type="password" name="pass" placeholder="Password">
-                  <button class="btn" style="background-color:#607D8B" type="submit">Log In</button>
-                </form>
+              
+                  <input id="loginuser" type="email" name="email" placeholder="Email Id / username">
+                  <input id="loginpass" type="password" name="pass" placeholder="Password">
+                  <button class="btn" style="background-color:#607D8B" type="submit" onclick="login()">Log In</button>
+                
               </div>
               <div id="test5">
-                <form action="/signupsubmit" method ="POST">
-                  <input type="text" name="name" placeholder="Name">
-                  <input type="email" name="email" placeholder="Email Id">
-                  <input type="password" name="pass" placeholder="Password">
-                  <button class="btn" style="background-color:#607D8B" type="submit">Sign Up</button>
-                </form>
+                  <input id="name" text" name="name" placeholder="Name">
+                  <input id="email" type="email" name="email" placeholder="Email Id">
+                  <input id="signuppass" type="password" name="pass" placeholder="Password">
+                  <button class="btn" style="background-color:#607D8B" type="submit" onclick="signup()">Sign Up</button>
+                
               </div>
             </div>
           </div>
@@ -50,5 +49,9 @@
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="js/app.js">
+         
+    </script>
   </body>
 </html>

@@ -16,15 +16,15 @@ admin.initializeApp({
   databaseURL: "https://safe-side-project.firebaseio.com"
 });
 
-firebase.initializeApp(firebase.config().firebase)
-
 app.get("/hi", (req, res) => {
 
     res.send("hello");
 
 })
 
-
+app.get('/dashboard', (req, res) => {
+	res.render('dashboard.ejs');
+})
 app.post("/signupsubmit", function (req,res) {
   admin.auth().createUser({
   name: req.body.name,
@@ -48,9 +48,14 @@ app.post("/loginsubmit", function (req,res) {
 	var uid = "some-uid";
 	var username = req.body.email;
 	var password = req.body.pass;
-	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-  		// Handle Errors here. 
+	firebase.auth().signInWithEmailAndPassword(email, password)
+	.then(function (argument) {
+		console.log(argument)
+	})
 
+
+	.catch(function(error) {
+  		// Handle Errors here. 
   		var errorCode = error.code;
   		var errorMessage = error.message;
   		// ...
