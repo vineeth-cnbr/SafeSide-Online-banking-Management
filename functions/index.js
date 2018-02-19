@@ -4,9 +4,16 @@ const admin = require("firebase-admin");
 var functions = require("firebase-functions");
 var firebase = require('firebase');
 var bodyParser = require('body-parser');
+var cookieSession = require('cookie-session')
 
 app.use(express.static( __dirname + '/public'));
 app.set('view engine', 'ejs');
+app.use(cookieSession({
+  keys: ['ThisIsSecret'],
+  // Cookie Options 
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours 
+}))
+
 
 app.get("/hi", (req, res) => {
 
@@ -14,7 +21,16 @@ app.get("/hi", (req, res) => {
 
 });
 
+app.post("/login", (req, res) => {
+  console.log(req.body.uid);
+  console.log(req.__session);
+  req.__session.user = req.body.uid;
+  console.log(req.__session.user)
+  res.redirect("/dashboard")
+})
+
 app.get('/dashboard', (req, res) => {
+  console.log(req.__session)
 	res.render('dashboard.ejs');
 });
 
