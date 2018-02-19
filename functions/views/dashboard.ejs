@@ -10,9 +10,20 @@
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   </head>
-
   <body>
   <div class="container">
+      <div class="navbar-fixed">
+          <nav>
+            <div class="nav-wrapper">
+              <a href="" type="submit" class="brand-logo" onclick="signout()">Log Out</a>
+              <ul class="right hide-on-med-and-down">
+                <li><a href="">Sass</a></li>
+                <li><a href="">Components</a></li>
+      
+              </ul>
+            </div>
+          </nav>
+        </div>
  <ul id="slide-out" class="side-nav">
     <li><div class="user-view">
       <div class="background">
@@ -28,23 +39,12 @@
     <li><a class="subheader">Subheader</a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
-  <div class="navbar-fixed">
-    <nav>
-      <div class="nav-wrapper">
-        <a href="" type="submit" class="brand-logo" onclick="signout()">Log Out</a>
-        <ul class="right hide-on-med-and-down">
-          <li><a href="">Sass</a></li>
-          <li><a href="">Components</a></li>
-
-        </ul>
-      </div>
-    </nav>
-  </div>
   <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
- <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
+<script type="text/javascript" src="dash.js"></script>
 </body>
 </html>
