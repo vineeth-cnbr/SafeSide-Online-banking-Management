@@ -8,10 +8,6 @@ var bodyParser = require('body-parser');
 app.use(express.static( __dirname + '/public'));
 app.set('view engine', 'ejs');
 
-<<<<<<< HEAD
-<<<<<<< HEAD 
-=======
->>>>>>> 962e999a5b458a4a84a42245f726b1f4c41e6038
 //admin.initializeApp(functions.config().firebase
 
 var serviceAccount = require("./secret.json");
@@ -24,7 +20,6 @@ app.get("/hi", (req, res) => {
 
     res.send("hello");
 
-<<<<<<< HEAD
 })
 
 app.get('/dashboard', (req, res) => {
@@ -39,16 +34,13 @@ app.post("/signupsubmit", function (req,res) {
 /* 
   photoURL: "http://www.example.com/12345678/photo.png",
   disabled: false*/
-=======
 app.get("/hi", (req, res) => {
     res.send("hello")
-=======
->>>>>>> 962e999a5b458a4a84a42245f726b1f4c41e6038
 })
 
 
 app.post("/signupsubmit", function (req,res) {
-<<<<<<< HEAD
+
 	admin.auth().createUser({
 	name: req,body.name,
 	email: req.body.email,
@@ -57,8 +49,7 @@ app.post("/signupsubmit", function (req,res) {
 	/*displayName: "John Doe",
 	photoURL: "http://www.example.com/12345678/photo.png",
 	disabled: false*/
->>>>>>> vineeth
-=======
+
   admin.auth().createUser({
   name: req.body.name,
   email: req.body.email,
@@ -77,10 +68,6 @@ app.post("/signupsubmit", function (req,res) {
     console.log("Error creating new user:", error);
   });
 })
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 962e999a5b458a4a84a42245f726b1f4c41e6038
 
 app.post("/loginsubmit", function (req,res) {
 	var uid = "some-uid";
@@ -98,12 +85,7 @@ app.post("/loginsubmit", function (req,res) {
   		var errorMessage = error.message;
   		// ...
 	});
-})
-<<<<<<< HEAD
-=======
->>>>>>> vineeth
-=======
->>>>>>> 962e999a5b458a4a84a42245f726b1f4c41e6038
+}
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 
