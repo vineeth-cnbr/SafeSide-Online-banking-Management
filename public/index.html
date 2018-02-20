@@ -29,16 +29,20 @@
             </div>
             <div class="card-content grey lighten-4">
               <div id="test4">
+                <form action="/login" id="logform" method="POST">
                   <input id="loginuser" type="email" name="email" placeholder="Email Id / username">
                   <input id="loginpass" type="password" name="pass" placeholder="Password">
-                  <button class="btn" style="background-color:#607D8B" type="submit" onclick="login()">Log In</button>
+                  <input id="uid" name="uid" class="hide" type="text">
+                </form>
+                  <button class="btn" style="background-color:#607D8B" onclick="login()">Log In</button>
               </div>
               <div id="test5">
                   <input id="name" type="text" name="name" placeholder="Name">
                   <input id="email" type="email" name="email" placeholder="Email Id">
                   <input id="signuppass" type="password" name="pass" placeholder="Password">
                   <button class="btn" style="background-color:#607D8B" type="submit" onclick="signup()">Sign Up</button>
-              </div>
+                  <input id="uidsign" class="hide" type="text">
+                </div>
             </div>
             <br>
       </div>
