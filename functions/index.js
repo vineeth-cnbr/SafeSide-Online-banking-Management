@@ -22,15 +22,11 @@ app.get("/hi", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log(req.body.uid);
-  console.log(req.__session);
-  req.__session.user = req.body.uid;
-  console.log(req.__session.user)
+  console.log("uid: "+req.body.uid);
   res.redirect("/dashboard")
 })
 
-app.get('/dashboard', (req, res) => {
-  console.log(req.__session)
+app.get('/dashboard', (req, res) => { 
 	res.render('dashboard.ejs');
 });
 

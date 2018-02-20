@@ -48,11 +48,12 @@ function login() {
 		.then(function() {
 				var user = firebase.auth().currentUser;
 				console.log(user.uid);
-				xhttp.open("POST", "/login", true);
-				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				xhttp.send("uid="+user.uid);
-
-				window.location.assign('/dashboard');//s
+				document.getElementById("uid").value = user.uid;
+				console.log("uid value" + document.getElementById("uid").value)
+				$(document).ready(function() {
+					$('#logform').submit();
+				})
+				
 		})
 		.catch(function(error) {
 			// Handle Errors here.
