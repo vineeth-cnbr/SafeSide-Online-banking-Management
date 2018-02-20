@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cookie-session": "^2.0.0-beta.3",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "firebase": "^4.8.0",
