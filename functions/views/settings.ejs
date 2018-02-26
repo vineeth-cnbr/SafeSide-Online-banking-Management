@@ -1,0 +1,54 @@
+<% include nav.ejs %>
+
+<div class="row">
+    <h2>
+        Account Settings
+    </h2>
+    <ul class="collection">
+        <li class="collection-item">
+            <a  onclick="changePassword()" >
+            Change Password
+            </a>
+        </li>
+        <li class="collection-item">
+            Delete Account
+        </li>
+        <li class="collection-item">
+            <a href="">
+                    Add Balance
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal">
+    <form action="" onsubmit="changePassword()">
+        <div class="modal-content">
+          <h4>Change Password</h4>
+          <br>
+          
+                <div class="input-field col s12">
+                    <input id="password" type="password" class="validate">
+                    <label for="password">Old Password</label>
+                </div>
+                
+                <div class="input-field col s12">
+                    <input id="newpassword" type="password" class="validate">
+                    <label for="password">New Password</label>
+                </div>
+
+                
+                <div class="input-field col s12">
+                    <input id="cnewpassword" type="password" class="validate">
+                    <label for="password">Confirm New Password</label>
+                </div>
+          
+        </div>
+        <div class="modal-footer">
+          <a href="#!" type="submit" class="modal-action modal-close waves-effect waves-green btn-flat">Change</a>
+        </div>
+    </form>
+</div>
+
+<% include foot.ejs %>

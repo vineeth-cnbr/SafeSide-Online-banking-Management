@@ -27,7 +27,7 @@ app.post("/login", (req, res) => {
 })
 
 app.get('/dashboard', (req, res) => { 
-	res.render('dashboard.ejs');
+	res.render('settings.ejs');
 });
 
 app.post("/signupsubmit", function (req,res) {

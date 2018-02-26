@@ -8,19 +8,34 @@ var config = {
     messagingSenderId: "178491336655"
   };
   firebase.initializeApp(config);
-
-
+var db = firebase.firestore();
 function signup() {
+	var name = document.getElementById('name').value;
 	var email = document.getElementById('email').value;
 	var password = document.getElementById('signuppass').value;
 	firebase.auth().createUserWithEmailAndPassword(email, password)
 		.then(function(odj) {
 			var user = firebase.auth().currentUser;
 			user.sendEmailVerification().then(function() {
-					window.location.assign('/dashboard');
+				console.log("sent verify email")
+
+					return db.collection('users').doc(user.uid).set( {
+						Name: name,
+						uid: user.uid,
+						email: email,
+						Balance: 0
+					})
 					
-				}).catch(function(error) {
-				  // An error happened.
+					
+				}).then(function(asd) {
+					console.log(asd);
+					console.log("firestore op finished");
+					window.location.assign('/dashboard')
+
+				
+				}).catch(function(error){
+					console.log(error);
+				  console.log("verification error");
 				});
 		})
 		.catch(function(error) {
@@ -34,6 +49,7 @@ function signup() {
 				Materialize.toast("The email is already in use",4000);		
 			}
 			else {
+				console.log(error);
 				Materialize.toast("Something went wrong. Try again!",4000);		
 				
 			}
