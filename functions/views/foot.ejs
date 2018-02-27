@@ -11,7 +11,7 @@
         <div class="footer-copyright">
           <div class="container">
           © 2014 Copyright Text
-          <a class="grey-text text-lighten-4 right" onclick="signout()">LOGOUT</a>
+          <a class="grey-text text-lighten-4 right" href="#" onclick="signout()">LOGOUT</a>
           </div>
         </div>
       </footer>
@@ -25,7 +25,11 @@
 </script>
 <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-firestore.js"></script>
+
 <script src="js/dash.js"></script>
+<script>
+    var user = firebase.auth().currentUser;
+  </script>
 
 </html>
   

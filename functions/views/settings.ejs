@@ -4,51 +4,59 @@
     <h2>
         Account Settings
     </h2>
+    <p id="email-verify"></p>
     <ul class="collection">
+        <li class="collection-item">
+            <a  class="modal-trigger" href="#modal1" >
+            Change Name
+            </a>
+        </li>
         <li class="collection-item">
             <a  onclick="changePassword()" >
             Change Password
             </a>
         </li>
         <li class="collection-item">
-            Delete Account
-        </li>
-        <li class="collection-item">
+            <a class="modal-trigger" href="#modal2">
+                Delete Account
+            </a> 
+        </li> 
+      <!--  <li class="collection-item">
             <a href="">
                     Add Balance
             </a>
-        </li>
+        </li> -->
     </ul>
 </div>
 
 <!-- Modal Structure -->
 <div id="modal1" class="modal">
-    <form action="" onsubmit="changePassword()">
+    <form action="" >
         <div class="modal-content">
-          <h4>Change Password</h4>
+          <h4>Change Name</h4>
           <br>
           
-                <div class="input-field col s12">
-                    <input id="password" type="password" class="validate">
-                    <label for="password">Old Password</label>
-                </div>
-                
-                <div class="input-field col s12">
-                    <input id="newpassword" type="password" class="validate">
-                    <label for="password">New Password</label>
-                </div>
-
-                
-                <div class="input-field col s12">
-                    <input id="cnewpassword" type="password" class="validate">
-                    <label for="password">Confirm New Password</label>
-                </div>
+            <div class="input-field col s12">
+                <input id="name" type="text" class="validate" required>
+                <label for="password">New Name</label>
+            </div>
           
         </div>
         <div class="modal-footer">
-          <a href="#!" type="submit" class="modal-action modal-close waves-effect waves-green btn-flat">Change</a>
+          <a href="#!" type="submit" onclick="changeName()" class="modal-action modal-close waves-effect waves-green btn-flat">Change</a>
         </div>
     </form>
 </div>
 
+<div id="modal2" class="modal">
+        <form action="" >
+            <div class="modal-content">
+              <h5>Are you sure you wanna delete this account?</h5>
+              <br>
+            </div>
+            <div class="modal-footer">
+              <a href="#!" type="submit" style="color:red" onclick="deleteUser()" class="modal-action modal-close waves-effect waves-green btn-flat">delete</a>
+            </div>
+        </form>
+</div>
 <% include foot.ejs %>
