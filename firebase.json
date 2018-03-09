@@ -6,9 +6,11 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites" : [{
-      "function": "app",
-      "source": "**"
-    }]
+    "rewrites": [
+      {
+        "function": "app",
+        "source": "**"
+      }
+    ]
   }
 }
