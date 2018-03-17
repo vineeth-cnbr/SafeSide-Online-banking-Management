@@ -91,7 +91,9 @@ firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       db.collection('users').doc(user.uid).get()
         .then(function(doc) {
-            console.log(doc.data().Name);
+            document.getElementById("load").className =
+                document.getElementById("load").className.replace(/\bprogress\b/,'');
+            console.log(doc.data());
             document.getElementById('username-nav').innerHTML = 'Hello ' + doc.data().Name;
             document.getElementById('balance-nav').innerHTML = '  Current Balance: ' + doc.data().Balance;
             if(user.emailVerified) {
@@ -99,6 +101,9 @@ firebase.auth().onAuthStateChanged(function(user) {
             }else {
                 document.getElementById('email-verify').innerHTML = 'Your email is <b>not</b> verified. You can not access account functions';           
             }
+            document.getElementById('name-nav').innerHTML = doc.data().Name;
+            document.getElementById('email-nav').innerHTML = doc.data().email;
+            
         });
     } else {
         window.location.assign('/');
