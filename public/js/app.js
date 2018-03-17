@@ -58,6 +58,8 @@ function signup() {
 }
 
 function login() {
+	document.getElementById("load").className = 'progress'
+                //document.getElementById("load").className.replace('','progress');
 	var user =  document.getElementById('loginuser').value;
 	var pass =  document.getElementById('loginpass').value
 	firebase.auth().signInWithEmailAndPassword(user, pass)

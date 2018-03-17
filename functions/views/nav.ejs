@@ -30,21 +30,34 @@
   <nav class="blue-grey">
       <a class="white-text button-collapse show-on-large" href ="#" data-activates="slide-out"><i class="material-icons">menu</i></a>
     
+    <ul id="dropdown1" class="dropdown-content">
+        <li><a href="#!">one</a></li>
+        <li><a href="#!">two</a></li>
+        <li class="divider"></li>
+        <li><a href="#!">three</a></li>
+    </ul>
     <div class="nav-wrapper">
         <ul class="right">
+            
+            <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons">message</i></a></li>
+            
+            <li>&nbsp;&nbsp;&nbsp;</li>
             <li id="username-nav"></li>
             <li>&nbsp;&nbsp;&nbsp;</li>
             <li id="balance-nav"></li>
             <li>&nbsp;&nbsp;&nbsp;</li>
         </ul>
+        <div id="load" class="progress">
+            <div class="indeterminate"></div>
+        </div>
     </div>
     
     <ul id="slide-out" class="side-nav">
       <div class="background"></div>
         <li><div class="user-view">
              <a href="#!user"><img class="circle" src=""></a>
-            <a href="#!name"><span class="black-text name">Vicky Sharma</span></a>
-            <a href="#!email"><span class="black-text email">vickysharma1711@gmail.com</span></a>
+            <a  href="#!name"><span id="name-nav" class="black-text name"></span></a>
+            <a  href="#!email"><span id="email-nav" class="black-text email">vickysharma1711@gmail.com</span></a>
         </div>
         </li>
       <li><a class="waves-effect" href="#!"><i class="material-icons">account_balance</i>Account 1 Balance</a></li>
