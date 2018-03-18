@@ -21,14 +21,14 @@
 	}
 	</style>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="css/dash.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       
 </head>
 <body>
   <nav class="blue-grey">
-      <a class="white-text button-collapse show-on-large" href ="#" data-activates="slide-out"><i class="material-icons">menu</i></a>
+    <a class="white-text button-collapse show-on-large" href ="#" data-activates="slide-out"><i class="material-icons">menu</i></a>
     
     <ul id="dropdown1" class="dropdown-content">
         <li><a href="#!">one</a></li>
@@ -37,9 +37,24 @@
         <li><a href="#!">three</a></li>
     </ul>
     <div class="nav-wrapper">
+        <ul id="dropdown2" style="margin-top: 67px" class="dropdown-content">
+          <div id="content"  style="padding-top: 20px" align = 'center'>
+              <div class="preloader-wrapper small active">
+                  <div class="spinner-layer spinner-blue-only">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </ul>
         <ul class="right">
             
-            <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons">message</i></a></li>
+            <li><a class=" dropdown-button" style="width:250px;" href="#!" id="notif" data-activates="dropdown2"><i class="right material-icons">message</i></a></li>
             
             <li>&nbsp;&nbsp;&nbsp;</li>
             <li id="username-nav"></li>
@@ -57,7 +72,7 @@
         <li><div class="user-view">
              <a href="#!user"><img class="circle" src=""></a>
             <a  href="#!name"><span id="name-nav" class="black-text name"></span></a>
-            <a  href="#!email"><span id="email-nav" class="black-text email">vickysharma1711@gmail.com</span></a>
+            <a  href="#!email"><span id="email-nav" class="black-text email"></span></a>
         </div>
         </li>
       <li><a class="waves-effect" href="#!"><i class="material-icons">account_balance</i>Account 1 Balance</a></li>

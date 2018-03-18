@@ -1,18 +1,27 @@
 var express = require('express');
 var app = express();
+const path = require('path');
+const publicPath = path.join(__dirname,'..','/public'); 
 const admin = require("firebase-admin");
-var functions = require("firebase-functions");
-var firebase = require('firebase');
+//var functions = require("firebase-functions");
+//var firebase = require('firebase');
+var serviceAccount = require('./secret.json');
+admin.initializeApp( {
+	credential: admin.credential.cert(serviceAccount)
+})
 var bodyParser = require('body-parser');
 var cookieSession = require('cookie-session')
-
-app.use(express.static( __dirname + '/public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(publicPath));
 app.set('view engine', 'ejs');
 app.use(cookieSession({
   keys: ['ThisIsSecret'],
   // Cookie Options 
   maxAge: 24 * 60 * 60 * 1000 // 24 hours 
 }))
+
+var db = admin.firestore();
 
 
 app.get("/hi", (req, res) => {
@@ -22,13 +31,26 @@ app.get("/hi", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log("uid: "+req.body.uid);
+	console.log("uid: "+req.body.uid);
+	req.session.uid = req.body.uid;
   res.redirect("/dashboard")
 })
 
 app.get('/dashboard', (req, res) => { 
 	res.render('settings.ejs');
 });
+
+app.get('/notif', (req, res) => {
+	db.collection('users').doc(req.session.uid).get()
+		.then((doc) => {
+			if(doc.data().notifs) {
+				res.send(doc.data().notifs);
+			}
+			else {
+				res.send("No response");
+			}
+		})
+})
 
 app.post("/signupsubmit", function (req,res) {
   admin.auth().createUser({
@@ -84,6 +106,8 @@ app.post("/loginsubmit", function (req,res) {
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 
 
+app.listen(8000, function(){
 
+	console.log('listening at :'+ '8000')
+});
 
-exports.app = functions.https.onRequest(app);

@@ -21,6 +21,17 @@
 <script type="text/javascript">
     $(".button-collapse").sideNav();
     $('.modal').modal();
+    $('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: false, // Does not change width of dropdown to that of the activator
+      hover: false, // Activate on hover
+      gutter: 100, // Spacing from edge
+      belowOrigin: true, // Displays dropdown below the button
+      //alignment: 'left', // Displays dropdown with edge aligned to the left of button
+      stopPropagation: false // Stops event propagation
+    }
+  );
 
 </script>
 <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>

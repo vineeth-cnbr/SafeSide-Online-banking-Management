@@ -1,5 +1,6 @@
 $(document).ready(function(){
     $(".button-collapse").sideNav();
+    $('.tooltipped').tooltip({delay: 50});
 });
 
 
@@ -86,6 +87,37 @@ function deleteUser() {
     // An error happened.
     });
 }
+
+// notification access
+    $("#notif").click(function(){
+        $.get("/notif", function(data, status){
+            if(status == 'success') {
+                console.log(data);
+                var list ='';
+                if(data.length==0) {
+                    list = list + '<li><a href="">You have no friends</a></li><li class="divider"></li>';
+                }
+                else {
+                    for(var i=0;i<data.length;i++) {
+                        var list = list + '<li><a><h6  style="margin-bottom:-25px;">'+data[i].title+'</h6><br><p style="color: teal;font-size:0.9em;padding:5px;margin-bottom:-12px;">'+data[i].message+'</p></a></li><li class="divider"></li>';
+  
+                    }
+                }
+                //$("#dropdown2").append('<li><a href="">'+data+'</a></li>');
+                var content =  '<div id="content">' + list + '</div>'
+                /*<div id="content">
+                    <li><a href="#!">one</a></li>
+                    <li><a href="#!">two</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#!">three</a></li>
+                </div>*/
+                $('#content').replaceWith(content)
+            }else {
+                console.log(data);
+            }
+            
+        });
+    });
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
