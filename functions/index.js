@@ -40,14 +40,53 @@ app.get('/dashboard', (req, res) => {
 	res.render('settings.ejs');
 });
 
-app.get('/notif', (req, res) => {
-	db.collection('users').doc(req.session.uid).get()
-		.then((doc) => {
-			if(doc.data().notifs) {
-				res.send(doc.data().notifs);
+app.post('/readChange', (req,res) => {
+	/*
+		title = req.body.title
+	*/
+	var dbvar = db.collection('users').doc(req.session.uid).collection('notifs')
+	var dbget = dbvar.get()
+	.then(snapshot =>{
+		snapshot.forEach(doc =>{
+			if(doc.title == req.body.title){
+				var update = dbvar+'.doc('+doc.id+')'
+				var updateRef = update.update({
+					read:true
+				})
+				.then(data =>{
+					console.log('success' + data);
+				})
+
+				.catch(err =>{
+					console.log("Error"+ err);
+				})
 			}
-			else {
-				res.send("No response");
+		})
+	})
+
+
+});
+
+app.get('/notif', (req, res) => {
+	var result = [];
+	db.collection('users').doc(req.session.uid).collection('notifs').get()
+		.then((querySnapshot) => {
+			if(!querySnapshot.empty){
+				querySnapshot.forEach(doc =>{
+						result.push(doc)
+						console.log('inside QS')
+				})
+				.then(function(){
+					console.log('fetching notifications done');
+					res.send(result);
+				})
+				.catch(function(error){
+					console.log('error'+error);
+					res.send('No response')
+				})
+			}
+			else{
+				res.send('Empty notification bar'); // no notifications inside notifs
 			}
 		})
 })
