@@ -99,26 +99,32 @@ function deleteUser() {
                 }
                 else {
                     for(var i=0;i<data.length;i++) {
-                        var list = list + '<li><div class="row">\
+                        if(data[i].read) {
+                            var list = list + '<li style="background-color:#eee"><div class="row">\
                                             <div class="col s10">\
                                                 <h6  style="margin-bottom:-25px;color: teal">'+data[i].title+'</h6>\
                                                 <br><p style="color: teal;font-size:0.9em;padding:5px;margin-bottom:-12px;">'
                                                 +data[i].message+'</p>\</div>\
-                                            <a class="col s2"  href="delet"><i class=" material-icons" style="color:red">delete</i></a>    \
+                                            <a class="col s2"  onclick="deleteMessage(\''+data[i].id+'\')"><i class=" material-icons" style="color:red">delete</i></a>    \
                                            </div>\
                                            </li>\
                                            <li class="divider"></li>';
+                        }else {
+                            var list = list + '<li><a onclick="readMessage(\''+data[i].id+'\')"><div class="row">\
+                                                <div class="col s10">\
+                                                    <h6  style="margin-bottom:-25px;color: teal">'+data[i].title+'</h6>\
+                                                    <br><p style="color: teal;font-size:0.9em;padding:5px;margin-bottom:-12px;">'
+                                                    +data[i].message+'</p>\</div>\
+                                                <a class="col s2"  onclick="deleteMessage(\''+data[i].id+'\')"><i class=" material-icons" style="color:red">delete</i></a>    \
+                                            </div></a>\
+                                            </li>\
+                                            <li class="divider"></li>';
+                        }
   
                     }
                 }
                 //$("#dropdown2").append('<li><a href="">'+data+'</a></li>');
                 var content =  '<div id="content">' + list + '</div>'
-                /*<div id="content">
-                    <li><a href="#!">one</a></li>
-                    <li><a href="#!">two</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#!">three</a></li>
-                </div>*/
                 $('#content').replaceWith(content)
             }else {
                 console.log(data);
@@ -126,6 +132,22 @@ function deleteUser() {
             
         });
     });
+
+function readMessage(id) {
+    $.post('/messageRead',  {
+            id: id
+        },function(data, success) {
+
+    })
+}
+
+function deleteMessage(id) {
+    $.post('/messageDelete',  {
+            id: id
+        },function(data, success) {
+            
+    })
+}
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {

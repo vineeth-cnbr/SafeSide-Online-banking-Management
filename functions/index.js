@@ -40,15 +40,23 @@ app.get('/dashboard', (req, res) => {
 	res.render('settings.ejs');
 });
 
-app.post('/readChange', (req,res) => {
+app.post('/messageRead', (req,res) => {
 	/*
 		title = req.body.title
 	*/
+
+	db.collection('users').doc(req.session.uid).collection('notifs').doc(req.body.id).update({
+		read: true
+	})
+		.then(()=> {
+			res.send('success');
+		})
+	/*
 	var dbvar = db.collection('users').doc(req.session.uid).collection('notifs')
 	var dbget = dbvar.get()
 	.then(snapshot =>{
 		snapshot.forEach(doc =>{
-			if(doc.title == req.body.title){
+			if(doc.id == req.body.id){
 				var update = dbvar+'.doc('+doc.id+')'
 				var updateRef = update.update({
 					read:true
@@ -63,27 +71,45 @@ app.post('/readChange', (req,res) => {
 			}
 		})
 	})
-
+*/
 
 });
 
+app.get('/addMessage/:message',(req,res) => {
+	var ref= db.collection('users').doc(req.session.uid).collection('notifs').doc()
+	console.log(ref);
+	ref.set({
+		id: ref.id,
+		title: 'random title',
+		message: req.params.message,
+		read: false
+	}).then(()=>{
+		res.send("Notification added");
+	});
+	
+})
+
 app.get('/notif', (req, res) => {
-	var result = [];
+	
 	db.collection('users').doc(req.session.uid).collection('notifs').get()
 		.then((querySnapshot) => {
 			if(!querySnapshot.empty){
+				var result = [];
+				console.log(querySnapshot.size)
+				var size = querySnapshot.size;
+				var i=0;
 				querySnapshot.forEach(doc =>{
-						result.push(doc)
+						console.log('notif uid' + doc.id)
+						result.push(doc.data())
+						i++;
+						console.log(i);
+						if(i==size) {
+							console.log(result);
+							res.send(result);	
+						}
 						console.log('inside QS')
 				})
-				.then(function(){
-					console.log('fetching notifications done');
-					res.send(result);
-				})
-				.catch(function(error){
-					console.log('error'+error);
-					res.send('No response')
-				})
+				
 			}
 			else{
 				res.send('Empty notification bar'); // no notifications inside notifs
@@ -92,8 +118,8 @@ app.get('/notif', (req, res) => {
 })
 
 app.post('/messagedelete', (req, res)=> {
-	var notifNo = req.body.notifNo; 
-	db.collection('users').doc(req.session.uid).collection('notifs').doc(req.body.notifNo).delete()
+	var notifNo = req.body.id; 
+	db.collection('users').doc(req.session.uid).collection('notifs').doc(notifNo).delete()
 		.then(()=> {
 			res.send("success");
 		})
