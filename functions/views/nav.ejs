@@ -30,12 +30,7 @@
   <nav class="blue-grey">
     <a class="white-text button-collapse show-on-large" href ="#" data-activates="slide-out"><i class="material-icons">menu</i></a>
     
-    <ul id="dropdown1" class="dropdown-content">
-        <li><a href="#!">one</a></li>
-        <li><a href="#!">two</a></li>
-        <li class="divider"></li>
-        <li><a href="#!">three</a></li>
-    </ul>
+    
     <div class="nav-wrapper">
         <ul id="dropdown2" style="margin-top: 67px" class="dropdown-content">
           <div id="content"  style="padding-top: 20px" align = 'center'>
@@ -70,21 +65,30 @@
     <ul id="slide-out" class="side-nav">
       <div class="background"></div>
         <li><div class="user-view">
-             <a href="#!user"><img class="circle" src=""></a>
+             <a href="#!user"><img class="circle" src="img/man.png"></a>
             <a  href="#!name"><span id="name-nav" class="black-text name"></span></a>
             <a  href="#!email"><span id="email-nav" class="black-text email"></span></a>
         </div>
         </li>
-      <li><a class="waves-effect" href="#!"><i class="material-icons">account_balance</i>Account 1 Balance</a></li>
-      <li><a class ="waves-effect" href="#!"><i class="material-icons">mood</i>Second Link</a></li>
-        <li><a class='dropdown-button' href='#' data-activates='dropdown1'>Account Management<i class="material-icons right">arrow_drop_down</i></a></li>
-        <ul id='dropdown1' class='dropdown-content'>
-          <li><a  href="#!"><i class = "material-icons">monetization_on</i>Savings</a></li>
-          <li><a  href="#!"><i class = "material-icons">home</i>Home Loans</a></li>
-          <li><a  href="#!"><i class = "material-icons">attach_money</i>Investments</a></li>
-          <li><a  href="#!"><i class="material-icons">business_center</i>Insurance</a></li>
-          <li><a  href="#!"><i class="material-icons">credit_card</i>Credit Card</a></li>
-      </ul>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">account_balance</i>Account Balance</a></li>
+      <li class="no-padding">
+          <ul class="collapsible collapsible-accordion">
+            <li>
+              <a class="collapsible-header">Account Management<i class="material-icons">arrow_drop_down</i></a>
+              <div class="collapsible-body">
+                <ul>
+                    <li><a  href="#!"><i class = "material-icons">monetization_on</i>Savings</a></li>
+                    <li><a  href="#!"><i class = "material-icons">home</i>Home Loans</a></li>
+                    <li><a  href="#!"><i class = "material-icons">attach_money</i>Investments</a></li>
+                    <li><a  href="#!"><i class="material-icons">business_center</i>Insurance</a></li>
+                    <li><a  href="#!"><i class="material-icons">credit_card</i>Credit Card</a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li><a class ="waves-effect" href="#!"><i class="material-icons">settings</i>Account Settings</a></li>
+      
     </ul> 
     
     

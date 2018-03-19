@@ -52,6 +52,27 @@ app.get('/notif', (req, res) => {
 		})
 })
 
+app.post('/messagedelete', (req, res)=> {
+	var notifNo = req.body.notifNo; 
+	db.collection('users').doc(req.session.uid).collection('notifs').doc(req.body.notifNo).delete()
+		.then(()=> {
+			res.send("success");
+		})
+		.catch((err) => {
+			res.send(err);
+		})
+		/*.then((doc) => {
+			var notifs = doc.data().notifs;
+			notifs.splice(notifNo,1);
+			db.collection('users').doc(req.session.uid).update({
+				notifs: notifs
+			}).then(()=> {
+				res.send("success");
+			}).catch((err)=>{
+				res.send(err);
+			})*/
+})
+
 app.post("/signupsubmit", function (req,res) {
   admin.auth().createUser({
   name: req.body.name,

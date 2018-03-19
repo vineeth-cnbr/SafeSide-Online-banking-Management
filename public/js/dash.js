@@ -99,7 +99,15 @@ function deleteUser() {
                 }
                 else {
                     for(var i=0;i<data.length;i++) {
-                        var list = list + '<li><a><h6  style="margin-bottom:-25px;">'+data[i].title+'</h6><br><p style="color: teal;font-size:0.9em;padding:5px;margin-bottom:-12px;">'+data[i].message+'</p></a></li><li class="divider"></li>';
+                        var list = list + '<li><div class="row">\
+                                            <div class="col s10">\
+                                                <h6  style="margin-bottom:-25px;color: teal">'+data[i].title+'</h6>\
+                                                <br><p style="color: teal;font-size:0.9em;padding:5px;margin-bottom:-12px;">'
+                                                +data[i].message+'</p>\</div>\
+                                            <a class="col s2"  href="delet"><i class=" material-icons" style="color:red">delete</i></a>    \
+                                           </div>\
+                                           </li>\
+                                           <li class="divider"></li>';
   
                     }
                 }
