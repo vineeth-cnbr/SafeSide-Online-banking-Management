@@ -41,37 +41,22 @@ app.get('/dashboard', (req, res) => {
 });
 
 app.post('/messageRead', (req,res) => {
-	/*
-		title = req.body.title
-	*/
-
 	db.collection('users').doc(req.session.uid).collection('notifs').doc(req.body.id).update({
 		read: true
 	})
 		.then(()=> {
 			res.send('success');
 		})
-	/*
-	var dbvar = db.collection('users').doc(req.session.uid).collection('notifs')
-	var dbget = dbvar.get()
-	.then(snapshot =>{
-		snapshot.forEach(doc =>{
-			if(doc.id == req.body.id){
-				var update = dbvar+'.doc('+doc.id+')'
-				var updateRef = update.update({
-					read:true
-				})
-				.then(data =>{
-					console.log('success' + data);
-				})
 
-				.catch(err =>{
-					console.log("Error"+ err);
-				})
-			}
-		})
+});
+
+app.post('/messageUnread', (req,res) => {
+	db.collection('users').doc(req.session.uid).collection('notifs').doc(req.body.id).update({
+		read: false
 	})
-*/
+		.then(()=> {
+			res.send('success');
+		})
 
 });
 
@@ -136,6 +121,22 @@ app.post('/messagedelete', (req, res)=> {
 			}).catch((err)=>{
 				res.send(err);
 			})*/
+});
+
+app.post('/regComplaint', (req, res) => {
+	//console.log("Submit is working bruh :3")
+	var title = req.body.title;
+	var body = req.body.body;
+	var compRef = db.collection('users').doc(req.session.uid).collection('notifs').doc();
+		compRef.set( {
+			title: 'Complaint Registered: ' +title,
+			message: 'Message body : '+body,
+			id: compRef.id,
+			read: false
+		})
+		.then(() => {
+			res.redirect('/dashboard');
+		})
 })
 
 app.post("/signupsubmit", function (req,res) {

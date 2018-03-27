@@ -1,4 +1,19 @@
-
+<a class="btn-floating btn-large waves-effect waves-light red right tooltipped modal-trigger" data-position="left" data-delay="50" data-tooltip="Register a complaint" href="#complaint">
+  <i class="material-icons">add</i></a>
+</div>
+<div id="complaint" class="modal">
+  <form action="/regComplaint" method="POST">  
+    <div class="modal-content">
+      <h4>Register a complaint</h4>
+      
+      <input type="text" name="title" placeholder="Title of the Complaint" />
+      <input type="text" name="body" placeholder="Description of the complaint">
+      
+    </div>
+    <div class="modal-footer">
+      <button class="modal-action modal-close waves-effect waves-green btn-flat" type="submit">submit</button>
+    </div>
+  </form>
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>

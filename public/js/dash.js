@@ -95,16 +95,17 @@ function deleteUser() {
                 console.log(data);
                 var list ='';
                 if(data.length==0) {
-                    list = list + '<li><a href="">You have no friends</a></li><li class="divider"></li>';
+                    list = list + '<li><a href="">You have no Notifications</a></li><li class="divider"></li>';
                 }
                 else {
                     for(var i=0;i<data.length;i++) {
                         if(data[i].read) {
                             var list = list + '<li style="background-color:#eee"><div class="row">\
-                                            <div class="col s10">\
+                                            <div class="col s8">\
                                                 <h6  style="margin-bottom:-25px;color: teal">'+data[i].title+'</h6>\
                                                 <br><p style="color: teal;font-size:0.9em;padding:5px;margin-bottom:-12px;">'
                                                 +data[i].message+'</p>\</div>\
+                                                <a class="col s2"  onclick="unreadMessage(\''+data[i].id+'\')"><i class=" material-icons" style="color:black">markunread</i></a>\
                                             <a class="col s2"  onclick="deleteMessage(\''+data[i].id+'\')"><i class=" material-icons" style="color:red">delete</i></a>    \
                                            </div>\
                                            </li>\
@@ -115,7 +116,7 @@ function deleteUser() {
                                                     <h6  style="margin-bottom:-25px;color: teal">'+data[i].title+'</h6>\
                                                     <br><p style="color: teal;font-size:0.9em;padding:5px;margin-bottom:-12px;">'
                                                     +data[i].message+'</p>\</div>\
-                                                <a class="col s2"  onclick="deleteMessage(\''+data[i].id+'\')"><i class=" material-icons" style="color:red">delete</i></a>    \
+                                                    <a class="col s2"  onclick="deleteMessage(\''+data[i].id+'\')"><i class=" material-icons" style="color:red">delete</i></a>    \
                                             </div></a>\
                                             </li>\
                                             <li class="divider"></li>';
@@ -135,6 +136,14 @@ function deleteUser() {
 
 function readMessage(id) {
     $.post('/messageRead',  {
+            id: id
+        },function(data, success) {
+
+    })
+}
+
+function unreadMessage(id) {
+    $.post('/messageUnread',  {
             id: id
         },function(data, success) {
 
