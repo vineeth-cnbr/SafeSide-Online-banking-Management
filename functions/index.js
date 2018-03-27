@@ -40,6 +40,10 @@ app.get('/dashboard', (req, res) => {
 	res.render('settings.ejs');
 });
 
+app.get('/transfer', (req, res) => { 
+	res.render('transfer.ejs');
+});
+
 app.post('/messageRead', (req,res) => {
 	db.collection('users').doc(req.session.uid).collection('notifs').doc(req.body.id).update({
 		read: true
