@@ -26,7 +26,7 @@ function signup() {
 						}
 						custNo+=bank.data().size.toString();
 						db.collection('users').doc(user.uid).set( {
-							accountNo: bank['Bank Code'] + 	custNo,   
+							accountNo: bank.data().bankCode + custNo,   
 							Name: name,
 							uid: user.uid,
 							email: email,

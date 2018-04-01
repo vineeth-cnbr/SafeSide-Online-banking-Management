@@ -1,12 +1,104 @@
 <% include nav.ejs %>
+<style>
+  .tabs-content.carousel.initialized {
+    height: 100%;
+  }
+  
+  .carousel .carousel-item {
+    height: 140%;
+  }
+  .pagination li.active {
+    color: #607D8B;
+    background-color:#607D8B;
+  }
+</style>
 <div class="row"></div>
 <div class="row card">
-  <ul id="tabs-swipe-demo" class="tabs">
-    <li class="tab col s6"><a  style="color:#607D8B" href="#test-swipe-1">Test 1</a></li>
-    <li class="tab col s6"><a  style="color:#607D8B" class="active" href="#test-swipe-2">Test 2</a></li>
+  <ul id="tabs-swipe-demo" class="tabs" >
+    <li class="tab col s6"><a  style="color:#607D8B" href="#test-swipe-1">Payee List</a></li>
+    <li class="tab col s6"><a id="step-2"  style="color:#607D8B" class="active" href="#test-swipe-2">Transfer funds</a></li>
   </ul>
-  <div id="test-swipe-1" class="col s12" style="width:100%;">Test 1</div>
-  <div id="test-swipe-2" class="col s12" style="width:100%;">Test 2</div>
-</div>
+  <div id="test-swipe-1" class=" col s12" style="width:100%">
+    <div class="row">
+        <h4 class="col s8">Payee List</h4><a style="color: #607D8B;" class="col s4 modal-trigger" href="#addpayee" ><i class=" medium material-icons">add</i></a>
+    </div>
+    <div class="row">
+    <ul class="collection">
+        <% for(var i=0;i<result.length;i++) { %>
+        <li class="collection-item"><%= result[i].payeename %>&nbsp&nbsp<%=result[i].accnum%> <a onclick="movetostep2('<%=result[i].accnum%>','<%= result[i].payeename %>')"><i style="color: #607D8B" class=" right material-icons">chevron_right</i></a> </li>
+        <% } %>
 
+    </ul>
+    <ul class="pagination center" >
+        <li class="disabled"><a id="left" href="#!"><i class="material-icons">chevron_left</i></a></li>
+        <% for(i=0;i<3;i++) { %>
+        <li class="waves-affect"><a href="/transfer#<%=i%>"><%=i%></a></li>
+        <% } %>
+        <li class="waves-effect"><a id="right" href="#!"><i class="material-icons">chevron_right</i></a></li>
+      </ul>
+    
+    </div>
+             
+
+  
+
+
+  </div>
+  <div id="test-swipe-2" class="col s12" style="width:100%;">
+    <h4>Transfer funds</h4>
+    <br>
+    <h6>Pay money to <span id="accname"></span></h6>
+    <h6>Account Number: <span id="accno"></span></h6>
+    <h6> </h6>
+    <div class="input-field col s12">
+        <select>
+          <option value="1">Savings</option>
+          <option value="2">Current</option>
+        </select>
+        <label>Choose Account Type:</label>
+      </div>
+  </div>
+</div>
+<div id="addpayee" class="modal">
+    <div class="modal-content">
+      <form action="/addpayee" method="POST" >
+          <div class="modal-content">
+              <h4>Add Payee Details</h4>
+              <br>
+              <div class="input-field col s12">
+                  <input id="name" type="text" class="validate" name="payeename" >
+                  <label for="name">Payee Name</label>
+              </div>
+              <div class="input-field col s12">
+                  <input id="name" type="text" class="validate" name="bankname">
+                  <label for="name">Bank Name</label>
+              </div>
+              <div class="input-field col s12">
+                  <input id="name" type="text" class="validate" name="branchname">
+                  <label for="name">Branch Name</label>
+              </div>
+              <div class="input-field col s12">
+                  <input id="name" type="text" class="validate" name="accnum" required>
+                  <label for="name">Account Number</label>
+              </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="modal-action modal-close waves-effect waves-green btn-flat">add payee</button>
+          </div>
+      </form>
+  </div>
+          
+<script>
+  var AccountNumber = '',
+      AccountName = '';
+  function movetostep2(accnum,accname) {
+  AccountNumber = accnum;
+  AccountName = accname;
+  document.getElementById('accname').innerHTML = AccountName;
+  document.getElementById('accno').innerHTML = AccountNumber;
+  console.log(AccountNumber,AccountName);
+  $('#step-2').click();
+}
+</script>
 <% include foot.ejs %>

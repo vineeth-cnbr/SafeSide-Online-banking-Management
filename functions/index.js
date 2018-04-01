@@ -46,10 +46,74 @@ app.get('/dashboard', (req, res) => {
 });
 
 app.get('/transfer', (req, res) => { 
-	db.collection('users').doc(req.session.uid).collection('payees')
-	res.render('transfer.ejs');
+	db.collection('users').doc(req.session.uid).collection('payees').get()
+	.then((payees) => {
+		if(!payees.empty){
+				var result = [];
+				console.log(payees.size)
+				var size = payees.size;
+				var i=0;
+				payees.forEach(payee =>{
+								console.log('payee uid' + payee.id);
+								result.push(payee.data())
+								i++;
+								console.log(i);
+								if(i==size) {
+										console.log(result);
+										res.render('transfer',{result:result});	
+								}
+								console.log('inside QS')
+				})
+				
+		}
+		else{
+				console.log("No payees added. Yet.")
+				res.render('transfer',{result: ["No payees"]}); // no notifications inside notifs
+		}
+})
 });
 
+app.post("/addpayee", function(req, res) {
+	var payeeDetails = {
+			payeename : req.body.payeename,
+			bankname : req.body.bankname,
+			branchname : req.body.branchname,
+			accnum : req.body.accnum
+	}
+	console.log(payeeDetails);
+	db.collection('users').doc(req.session.uid).collection('payees').doc(req.body.accnum)
+			.set(payeeDetails)
+				.then(function() {
+					res.redirect('/transfer')
+				})
+});
+/*
+db.collection('users').doc(req.session.uid).collection('notifs').get()
+			.then((querySnapshot) => {
+					if(!querySnapshot.empty){
+							var result = [];
+							console.log(querySnapshot.size)
+							var size = querySnapshot.size;
+							var i=0;
+							querySnapshot.forEach(doc =>{
+											console.log('notif uid' + doc.id)
+											result.push(doc.data())
+											i++;
+											console.log(i);
+											if(i==size) {
+													console.log(result);
+													res.send(result);	
+											}
+											console.log('inside QS')
+							})
+							
+					}
+					else{
+							console.log("Empty notification bar")
+							res.send([]); // no notifications inside notifs
+					}
+			})
+*/
 
 app.post("/signupsubmit", function (req,res) {
   admin.auth().createUser({
