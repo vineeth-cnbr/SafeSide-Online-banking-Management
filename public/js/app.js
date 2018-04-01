@@ -17,20 +17,50 @@ function signup() {
 		.then(function(odj) {
 			var user = firebase.auth().currentUser;
 			user.sendEmailVerification().then(function() {
-				console.log("sent verify email")
-
-					return db.collection('users').doc(user.uid).set( {
-						Name: name,
-						uid: user.uid,
-						email: email,
-						Balance: 0
+				// email verification mail sent
+				db.collection('Admin').doc('Bank Details').get()
+					.then(function(bank) {
+						custNo = '';
+						for(var i=0;i<(5-bank.data().size.toString().length);i++) {
+							custNo+='0'
+						}
+						custNo+=bank.data().size.toString();
+						db.collection('users').doc(user.uid).set( {
+							accountNo: bank['Bank Code'] + 	custNo,   
+							Name: name,
+							uid: user.uid,
+							email: email,
+							current: {
+								valid: false,
+								balance: 0,
+							},
+							savings: {
+								valid: false,
+								balance: 0
+							}
+						})
 					})
+				
 					
 					
+				}).then(function() {
+					var refi = db.collection('users').doc(user.uid).collection('notifs').doc();
+					return refi.set({
+						title: 'Email Confirmation',
+            message: 'An email has been sent to ' + user.email + '. Please verify to access account functions.',
+            id: refi.id,
+            read: false
+					});
+
+				
 				}).then(function(asd) {
-					console.log(asd);
-					console.log("firestore op finished");
-					window.location.assign('/dashboard')
+					var user = firebase.auth().currentUser;
+					console.log(user.uid);
+					document.getElementById("uidsign").value = user.uid;
+					console.log("uid value" + document.getElementById("uidsign").value)
+					$(document).ready(function() {
+						$('#signform').submit();
+					})	
 
 				
 				}).catch(function(error){
@@ -81,12 +111,18 @@ function login() {
 			console.log(errorCode + " " + errorMessage );
 			if(errorCode=="auth/wrong-password") {
 				Materialize.toast("Your password is wrong", 4000);
+				document.getElementById("load").className = 
+					document.getElementById("load").className.replace('progress','');
 			}
 			else if(errorCode=="auth/user-not-found") {
 				Materialize.toast("Your username is wrong",4000);
+				document.getElementById("load").className = 
+					document.getElementById("load").className.replace('progress','');
 			}
 			else {
-				Materialize.toast("Something went wrong. Try again!")
+				Materialize.toast("Something went wrong. Try again!");
+				document.getElementById("load").className = 
+					document.getElementById("load").className.replace('progress','');
 			}
 	});
 }

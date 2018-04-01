@@ -43,12 +43,15 @@
                   <button class="btn" style="background-color:#607D8B" onclick="login()">Log In</button>
               </div>
               <div id="test5">
-                  <input id="name" type="text" name="name" placeholder="Name">
-                  <input id="email" type="email" name="email" placeholder="Email Id">
-                  <input id="signuppass" type="password" name="pass" placeholder="Password">
-                  <input type="text" class="datepicker" placeholder="Date of birth">
-                  <button class="btn" style="background-color:#607D8B" type="submit" onclick="signup()">Sign Up</button>
-                  <input id="uidsign" class="hide" type="text">
+                <form action="/login" id="signform" method="POST">
+                    <input id="name" type="text" name="name" placeholder="Name">
+                    <input id="email" type="email" name="email" placeholder="Email Id">
+                    <input id="signuppass" type="password" name="pass" placeholder="Password">
+                    <input type="text" class="datepicker" placeholder="Date of birth">
+                    <input id="uidsign" name="uid" class="hide" type="text">
+                </form>
+                  <button class="btn" style="background-color:#607D8B" onclick="signup()">Sign Up</button>
+                  
                 </div>
             </div>
             <br>

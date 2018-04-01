@@ -138,7 +138,7 @@ function readMessage(id) {
     $.post('/messageRead',  {
             id: id
         },function(data, success) {
-
+            console.log("message read")
     })
 }
 
