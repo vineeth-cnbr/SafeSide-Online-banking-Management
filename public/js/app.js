@@ -39,6 +39,11 @@ function signup() {
 								balance: 0
 							}
 						})
+						var up = bank.data().size+1;
+						console.log(up) 
+						db.collection('Admin').doc('Bank Details').update( {
+							size: up
+						})
 					})
 				
 					

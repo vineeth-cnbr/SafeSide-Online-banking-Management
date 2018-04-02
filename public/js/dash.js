@@ -99,6 +99,14 @@ function deleteUser() {
                 }
                 else {
                     for(var i=0;i<data.length;i++) {
+                        var theMessage = '';
+                        for(var j=0;j<data[i].message.length;j++) {
+                            if(j==50) {
+                                theMessage = data[i].message.substring(0,50) + '</br>';
+                                theMessage += data[i].message.substring(51,data[i].message.length);
+                            }
+                            //data[i].message = text_truncate(data[i].message,50);
+                        }
                         if(data[i].read) {
                             var list = list + '<li style="background-color:#eee"><div class="row">\
                                             <div class="col s8">\
@@ -115,7 +123,7 @@ function deleteUser() {
                                                 <div class="col s10">\
                                                     <h6  style="margin-bottom:-25px;color: teal">'+data[i].title+'</h6>\
                                                     <br><p style="color: teal;font-size:0.9em;padding:5px;margin-bottom:-12px;">'
-                                                    +data[i].message+'</p>\</div>\
+                                                    +theMessage+'</p>\</div>\
                                                     <a class="col s2"  onclick="deleteMessage(\''+data[i].id+'\')"><i class=" material-icons" style="color:red">delete</i></a>    \
                                             </div></a>\
                                             </li>\
@@ -166,7 +174,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                 document.getElementById("load").className.replace(/\bprogress\b/,'');
             console.log(doc.data());
             document.getElementById('username-nav').innerHTML = 'Hello ' + doc.data().Name;
-            document.getElementById('balance-nav').innerHTML = '  Current Balance: ' + doc.data().Balance;
+            document.getElementById('balance-nav').innerHTML = '  Current Balance: ' + doc.data().current.balance;
             if(user.emailVerified) {
                 document.getElementById('email-verify').innerHTML = 'Your email is verified. You can acess bank account functions';
             }else {
@@ -181,3 +189,18 @@ firebase.auth().onAuthStateChanged(function(user) {
       // No user is signed in.
     }
   });
+
+
+  text_truncate = function(str, length, ending) {
+    if (length == null) {
+      length = 100;
+    }
+    if (ending == null) {
+      ending = '...';
+    }
+    if (str.length > length) {
+      return str.substring(0, length - ending.length) + ending;
+    } else {
+      return str;
+    }
+  };
