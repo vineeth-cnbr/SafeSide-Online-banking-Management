@@ -44,6 +44,14 @@ app.get('/transfer', (req, res) => {
 	res.render('transfer.ejs');
 });
 
+app.get('/savings', (req, res) => { 
+	res.render('savings.ejs');
+});
+
+app.get('/current', (req, res) => { 
+	res.render('current.ejs');
+});
+
 app.post('/messageRead', (req,res) => {
 	db.collection('users').doc(req.session.uid).collection('notifs').doc(req.body.id).update({
 		read: true
