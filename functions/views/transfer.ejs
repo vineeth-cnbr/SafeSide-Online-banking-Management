@@ -47,16 +47,25 @@
   <div id="test-swipe-2" class="col s12" style="width:100%;">
     <h4>Transfer funds</h4>
     <br>
-    <h6>Pay money to <span id="accname"></span></h6>
-    <h6>Account Number: <span id="accno"></span></h6>
-    <h6> </h6>
-    <div class="input-field col s12">
-        <select>
+    <form method="POST" action="/transferfund">
+      <h6>Pay money to <span id="accname"></span></h6>
+      <h6>Account Number: <span id="accno"></span></h6>
+      <br>
+      <div style="width: 25%" class="input-field col s12">
+        <select name="typeAcc">
           <option value="1">Savings</option>
           <option value="2">Current</option>
         </select>
         <label>Choose Account Type:</label>
       </div>
+      <div class="col s12">
+        <h6>Enter the amount to send to account numer : <span id="accno1"></span></h6>
+        <input name="amount" type="number" name="amount" placeholder="Amount" style="width: 25%">
+        <input id="acno" type="number" name="acno" class="hide">
+        <button type="submit" class="btn" style="background-color: #607D8B">Deposit</button>
+      </div>
+    </form>
+    
   </div>
 </div>
 <div id="addpayee" class="modal">
@@ -97,7 +106,10 @@
   AccountName = accname;
   document.getElementById('accname').innerHTML = AccountName;
   document.getElementById('accno').innerHTML = AccountNumber;
-  console.log(AccountNumber,AccountName);
+  document.getElementById('acno').value = Number(AccountNumber);
+  document.getElementById('accno1').innerHTML = AccountNumber;
+//  console.log(AccountNumber,AccountName);
+
   $('#step-2').click();
 }
 </script>

@@ -53,6 +53,73 @@ app.get('/current', (req, res) => {
 	res.render('current.ejs');
 });
 
+app.post('/transferfund', (req,res) => {
+	
+		db.collection('users').get()
+			.then(function(users) {
+				console.log('hi');
+				users.forEach(function(user) {
+					if(user.data().accountNo == req.body.acno) {
+						console.log(user.data());
+						if(req.body.type==1) {
+							console.log(user.data().savings)
+
+							console.log(user.data().savings.balance)
+							var oldbalance = user.data().savings.balance;
+							db.collection('users').doc(user.data().uid).update({
+								savings: {
+									balance: oldbalance + req.body.amount
+								}
+							})
+							.then(function() {
+
+								db.collection('users').doc(req.session.uid).get()
+									.then(function(mine) {
+										var oldbalance = mine.data().savings.balance;
+										db.collection('users').doc(req.session.uid)
+											.update( {
+												savings: {
+													balance: oldbalance - req.body.amount
+												}
+										})
+										.then(function() {
+
+											res.send("over");
+										})
+									})
+									
+								
+							})
+						}
+						else {
+							var oldbalance = user.current.balance;
+							db.collection('users').doc(user.uid).update({
+								current: {
+									balance: oldbalance + req.body.amount
+								}
+							})
+							.then(function() {
+
+								db.collection('users').doc(req.session.uid).get()
+									.then(function(user) {
+										var oldbalance = user.current.balance;
+										return db.collection('users').doc(req.session.uid)
+											.update( {
+												current: {
+													balance: oldbalance - req.body.amount
+												}
+										})
+									})
+								
+							})
+						
+
+						}
+					}
+				})
+			})
+});
+
 app.get('/transfer', (req, res) => { 
 	db.collection('users').doc(req.session.uid).collection('payees').get()
 	.then((payees) => {
