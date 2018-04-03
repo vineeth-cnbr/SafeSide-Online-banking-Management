@@ -45,6 +45,14 @@ app.get('/dashboard', (req, res) => {
 	res.render('settings.ejs');
 });
 
+app.get('/savings', (req, res) => { 
+	res.render('savings.ejs');
+});
+
+app.get('/current', (req, res) => { 
+	res.render('current.ejs');
+});
+
 app.get('/transfer', (req, res) => { 
 	db.collection('users').doc(req.session.uid).collection('payees').get()
 	.then((payees) => {
@@ -72,6 +80,8 @@ app.get('/transfer', (req, res) => {
 		}
 })
 });
+
+
 
 app.post("/addpayee", function(req, res) {
 	var payeeDetails = {
