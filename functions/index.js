@@ -223,6 +223,7 @@ app.post("/loginsubmit", function (req,res) {
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 
 
+
 app.post('/messageRead', (req,res) => {
 	db.collection('users').doc(req.session.uid).collection('notifs').doc(req.body.id).update({
 			read: true
@@ -285,6 +286,34 @@ app.get('/notif', (req, res) => {
 					}
 			})
 })
+
+app.get('/HL', (req,res)=>{
+	console.log(req.session.uid);
+	db.collection('users').doc(req.session.uid).get()
+	.then((data) => {
+		var data1 = data.data().HL;
+		console.log(data1);
+		console.log("Inside .then");
+		res.render("HomeLoan.ejs", {data1});
+	})
+	.catch(() =>{console.log('error');})
+})
+
+app.post('/HLapply', (req,res)=>{
+	var principle = req.body.principle;
+	var time = req.body.time;
+	db.collection('users').doc(req.session.uid).update({
+		HL : {
+			status : true,
+			principle : principle,
+			time : time 
+		}
+	})
+	.then(()=>{
+		res.redirect('/HL');
+	})
+})
+
 
 app.post('/messagedelete', (req, res)=> {
 	var notifNo = req.body.id; 

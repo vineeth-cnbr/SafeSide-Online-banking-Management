@@ -13,6 +13,7 @@ function signup() {
 	var name = document.getElementById('name').value;
 	var email = document.getElementById('email').value;
 	var password = document.getElementById('signuppass').value;
+	var date_of_birth = document.getElementById('date_of_birth').value;
 	firebase.auth().createUserWithEmailAndPassword(email, password)
 		.then(function(odj) {
 			var user = firebase.auth().currentUser;
@@ -30,6 +31,7 @@ function signup() {
 							Name: name,
 							uid: user.uid,
 							email: email,
+							DOB : date_of_birth,
 							current: {
 								valid: false,
 								balance: 0,
@@ -37,6 +39,15 @@ function signup() {
 							savings: {
 								valid: false,
 								balance: 0
+							},
+							CC: {
+								status: false,
+								due : 0
+							},
+							HL : {
+								status : false,
+								principle : 0,
+								time : 0
 							}
 						})
 						var up = bank.data().size+1;
