@@ -1,23 +1,25 @@
 <% include nav.ejs %>
 
     <div class="row">
-        <h2>Savings Account</h2>
-        <div class="switch">
-                <label>
-                  Deactivate
-                  <input type="checkbox">
-                  <span class="lever"></span>
-                    Activate
-                </label>
-              </div>
-        <div class="input-field col s6">
-            <input placeholder="Enter amount" id="first_name" type="text" class="validate">
-            <label for="first_name">Add Money</label>
-          </div>
-          
-    </div>
-    <div class="input-field col s6">
-        <a class="waves-effect waves-light btn"><i class="material-icons right">library_add</i>Add</a>
-    </div>
-   <!-- <div class="input-field col s6">   --> 
+        <form method="POST" action="/savingsbalance">
+            <h2>Savings Account</h2>
+            <div class="switch">
+                    <label>
+                    Deactivate
+                    <input type="checkbox" >
+                    <span class="lever"></span>
+                        Activate
+                    </label>
+            </div>
+            <div class="input-field col s6">
+                <input placeholder="Enter amount" id="first_name" name="amount" type="number" class="validate" >
+                <label for="first_name">Add Money</label>
+            </div>
+            
+        
+            <div class="input-field col s6">
+               <button type="submit" ><a class="waves-effect waves-light btn" type="submit"><i class="material-icons right">library_add</i>Add</a></button>
+            </div>
+        </form>
+    </div> 
 <% include foot.ejs %>
