@@ -24,13 +24,13 @@
     <div class="row">
       <div class="col s3"></div>
         <div class="col s12 m6 card">
-            <div class="card-content">
+            <div class="card-content" >
               <h3 style="color:#607D8B;font-family: 'Exo 2'">SafeSide</h3>
             </div>
-            <div class="card-tabs">
-              <ul class="tabs tabs-fixed-width">
-                <li class="tab"><a style="color:#607D8B" href="#test4">Login</a></li>
-                <li class="tab"><a style="color:#607D8B"class="active" href="#test5">Sign Up</a></li>
+            <div class="card-tabs" >
+              <ul class="tabs" >
+                <li class="tab" style="width:49%;"><a style="color:#607D8B" href="#test4">Login</a></li>
+                <li class="tab" style="width:50%;"><a style="color:#607D8B"class="active" href="#test5">Sign Up</a></li>
               </ul>
             </div>
             <div class="card-content grey lighten-4">
@@ -68,14 +68,18 @@
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-firestore.js"></script>
     <script src="js/app.js"></script>
    <script> 
-          $('.datepicker').pickadate({
+      $('.datepicker').pickadate({
         selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15, // Creates a dropdown of 15 years to control year,
+        selectYears: 76, // Creates a dropdown of 15 years to control year,
         today: 'Today',
         clear: 'Clear',
         close: 'Ok',
-        closeOnSelect: false // Close upon selecting a date,
+        closeOnSelect: false, // Close upon selecting a date,
+        max:true
       });
+      var $input1 = $('.datepicker').pickadate()
+      var picker1 = $input1.pickadate('picker');
+      picker1.set('select', '1980-01-01', { format: 'yyyy-mm-dd' });
   
          
     </script>

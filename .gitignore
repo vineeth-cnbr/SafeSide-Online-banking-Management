@@ -1,3 +1,5 @@
 node_modules/
 firebase-debug.log
 secrect.json
+.vscode/
+package-lock.json
