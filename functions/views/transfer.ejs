@@ -14,18 +14,18 @@
 </style>
 <div class="row"></div>
 <div class="row card">
-  <ul id="tabs-swipe-demo" class="tabs" >
+  <ul id="tabs-swipe" class="tabs" >
     <li class="tab col s6"><a  style="color:#607D8B" href="#test-swipe-1">Payee List</a></li>
-    <li class="tab col s6"><a id="step-2"  style="color:#607D8B" class="active" href="#test-swipe-2">Transfer funds</a></li>
+    <li class="tab col s6 disabled" id="tab-2"><a id="step-2"  style="color:#607D8B" class="" href="#test-swipe-2">Transfer funds</a></li>
   </ul>
   <div id="test-swipe-1" class=" col s12" style="width:100%">
     <div class="row">
-        <h4 class="col s8">Payee List</h4><a style="color: #607D8B;" class="col s4 modal-trigger" href="#addpayee" ><i class=" medium material-icons">add</i></a>
+        <h4 class="col s8">Payee List</h4><a style="color: #607D8B;" class="col s4 modal-trigger tooltipped" data-position="left" data-delay="50" data-tooltip="Add a Payee" href="#addpayee" ><i class=" medium material-icons">add</i></a>
     </div>
     <div class="row">
     <ul class="collection">
         <% for(var i=0;i<result.length;i++) { %>
-        <li class="collection-item"><%= result[i].payeename %>&nbsp&nbsp<%=result[i].accnum%> <a onclick="movetostep2('<%=result[i].accnum%>','<%= result[i].payeename %>')"><i style="color: #607D8B" class=" right material-icons">chevron_right</i></a> </li>
+        <li class="collection-item"><%= result[i].payeename %>&nbsp&nbsp<%=result[i].accnum%><a onclick="deletePayee('<%=result[i].accnum%>','<%= result[i].payeename %>')"><i style="color: red" class=" right material-icons">delete</i></a> <a onclick="movetostep2('<%=result[i].accnum%>','<%= result[i].payeename %>')"><i style="color: #607D8B" class=" right material-icons">chevron_right</i></a> </li>
         <% } %>
 
     </ul>
@@ -97,20 +97,54 @@
           </div>
       </form>
   </div>
-          
+</div>
+
+<a class="waves-effect waves-light btn " href="#deletepayee">Modal</a>
+
+<!-- Modal Structure -->
+<div id="deletepayee" class="modal">
+  <form action="/deletepayee" method="POST">
+    <div class="modal-content">
+      <h6>Are You sure you want to delete <span id="paydel"></span>?</h6>
+    </div>
+    <input name="paydel2" type="text" class="hide" id="paydel2" />
+    <div class="modal-footer">
+      <button type="submit" class=" red modal-action modal-close waves-effect waves-green btn-flat">delete</button>
+    </div>
+  </form>
+</div>          
 <script>
   var AccountNumber = '',
       AccountName = '';
   function movetostep2(accnum,accname) {
-  AccountNumber = accnum;
-  AccountName = accname;
-  document.getElementById('accname').innerHTML = AccountName;
-  document.getElementById('accno').innerHTML = AccountNumber;
-  document.getElementById('acno').value = Number(AccountNumber);
-  document.getElementById('accno1').innerHTML = AccountNumber;
-//  console.log(AccountNumber,AccountName);
 
-  $('#step-2').click();
-}
+    if(accname=="No payees") {
+      console.log(true);
+      return 
+    }
+    AccountNumber = accnum;
+    AccountName = accname;
+    document.getElementById('accname').innerHTML = AccountName;
+    document.getElementById('accno').innerHTML = AccountNumber;
+    document.getElementById('acno').value = Number(AccountNumber);
+    document.getElementById('accno1').innerHTML = AccountNumber;
+    console.log(AccountNumber,AccountName);
+    document.getElementById("tab-2").className =
+                  document.getElementById("tab-2").className.replace(/\bdisabled\b/,'');
+
+    $('ul.tabs').tabs('select_tab', 'test-swipe-2');
+  }
+  function deletePayee(accnum,accname) {
+    if(accname=="No payees") {
+      console.log(true);
+      return 
+    }
+    console.log(accname,accnum)
+    document.getElementById("paydel").innerHTML = accname + ' with account number ' + accnum;
+    document.getElementById("paydel2").value = accnum
+    $('#deletepayee').modal('open');
+  }
+
+
 </script>
 <% include foot.ejs %>

@@ -72,10 +72,15 @@ function deleteUser() {
     console.log(user)
     user.delete().then(function() {
         console.log("deleted")
-        Materialize.toast("Account Deleted. Logging you out", 10000);
-        setTimeout(function() {
-            signout();
-        },1000);
+        db.collection('users').doc(user.uid).delete().then(function () {
+            Materialize.toast("Account Deleted. Logging you out", 10000);
+            setTimeout(function() {
+                signout();
+            },1000);
+        }).catch(function(error) {
+            console.log(error);
+        });
+        
     }).catch(function(error) {
         console.log(error);
         if(error.code == 'auth/requires-recent-login') {

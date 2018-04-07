@@ -26,7 +26,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(publicPath));
 app.set('view engine', 'ejs');
 
-
+function isLoggedIn(req, res, next) {
+	if(req.session.user) {
+		next()
+	}else {
+		res.send("please login to continue");
+	}
+}
 
 
 app.get("/hi", (req, res) => {
@@ -37,91 +43,81 @@ app.get("/hi", (req, res) => {
 
 app.post("/login", (req, res) => {
 	console.log("uid: "+req.body.uid);
-	req.session.uid = req.body.uid;
-  res.redirect("/dashboard")
+	db.collection('users').doc(req.body.uid).get().then(function(user) {
+		req.session.user = user.data();
+		req.session.uid = req.body.uid;
+		console.log("Session data: ", req.session.user, req.session.user)
+  		res.redirect("/dashboard")
+	})
+	
 })
 
-app.get('/dashboard', (req, res) => { 
+app.get("/logout", isLoggedIn, (req, res) => {
+	req.session.user = null
+	res.redirect('/');
+})
+
+app.get('/dashboard',isLoggedIn, (req, res) => { 
 	res.render('settings.ejs');
 });
 
-app.get('/savings', (req, res) => { 
+app.get('/savings', isLoggedIn, (req, res) => { 
 	res.render('savings.ejs');
 });
 
-app.get('/current', (req, res) => { 
+app.get('/current', isLoggedIn, (req, res) => { 
 	res.render('current.ejs');
 });
 
 app.post('/transferfund', (req,res) => {
 	
-		db.collection('users').get()
-			.then(function(users) {
-				console.log('hi');
-				users.forEach(function(user) {
-					if(user.data().accountNo == req.body.acno) {
-						console.log(user.data());
-						if(req.body.type==1) {
-							console.log(user.data().savings)
-
-							console.log(user.data().savings.balance)
-							var oldbalance = user.data().savings.balance;
-							db.collection('users').doc(user.data().uid).update({
-								savings: {
-									balance: oldbalance + req.body.amount
-								}
-							})
-							.then(function() {
-
-								db.collection('users').doc(req.session.uid).get()
-									.then(function(mine) {
-										var oldbalance = mine.data().savings.balance;
-										db.collection('users').doc(req.session.uid)
-											.update( {
-												savings: {
-													balance: oldbalance - req.body.amount
-												}
-										})
-										.then(function() {
-
-											res.send("over");
-										})
-									})
-									
-								
-							})
+	db.collection('users').doc(req.session.uid).get().then(function(user) {
+		req.session.user = user.data();
+		if(user.data().savings.balance>=req.body.amount) {
+			return ;
+		}else {
+			res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
+		}
+	}).then(function() {
+		return db.collection('users').get()
+	}).then(function(users) {
+		console.log("All Users: ", users);
+			users.forEach(function(user) {
+				console.log("account Number,& acno",user.data().accountNo,req.body.acno)
+				if(user.data().accountNo == req.body.acno) {
+					console.log("Correct Account Number User", user.data());
+					var oldbalance = user.data().savings.balance;
+					console.log("Old Balance and body amount",oldbalance, req.body.amount)
+					var newBalance = Number(oldbalance) + Number(req.body.amount)
+					console.log(newBalance);
+					return db.collection('users').doc(user.data().uid).update({
+						savings: {
+							balance: newBalance
 						}
-						else {
-							var oldbalance = user.current.balance;
-							db.collection('users').doc(user.uid).update({
-								current: {
-									balance: oldbalance + req.body.amount
-								}
-							})
-							.then(function() {
-
-								db.collection('users').doc(req.session.uid).get()
-									.then(function(user) {
-										var oldbalance = user.current.balance;
-										return db.collection('users').doc(req.session.uid)
-											.update( {
-												current: {
-													balance: oldbalance - req.body.amount
-												}
-										})
-									})
-								
-							})
-						
-
-						}
-					}
-				})
+					})		
+				}	
 			})
+	
+	}).then(function() {
+		console.log("updated balance");
+		var oldBalance = req.session.user.savings.balance;
+		var newBalance = oldBalance - 100;
+		return db.collection('users').doc(req.session.user.uid).update({
+			savings: {
+				balance: newBalance
+			}
+		})
+	}).then(function() {
+		res.redirect('/transfer');
+		
+	}).catch(function(err) {
+		console.log(err);
+		res.send(err);
+	})
 });
 
-app.get('/transfer', (req, res) => { 
-	db.collection('users').doc(req.session.uid).collection('payees').get()
+app.get('/transfer',isLoggedIn, (req, res) => { 
+	db.collection('users').doc(req.session.user.uid).collection('payees').get()
 	.then((payees) => {
 		if(!payees.empty){
 				var result = [];
@@ -143,7 +139,7 @@ app.get('/transfer', (req, res) => {
 		}
 		else{
 				console.log("No payees added. Yet.")
-				res.render('transfer',{result: ["No payees"]}); // no notifications inside notifs
+				res.render('transfer',{result: [{payeename:	"No payees"}]}); // no notifications inside notifs
 		}
 })
 });
@@ -164,33 +160,14 @@ app.post("/addpayee", function(req, res) {
 					res.redirect('/transfer')
 				})
 });
-/*
-db.collection('users').doc(req.session.uid).collection('notifs').get()
-			.then((querySnapshot) => {
-					if(!querySnapshot.empty){
-							var result = [];
-							console.log(querySnapshot.size)
-							var size = querySnapshot.size;
-							var i=0;
-							querySnapshot.forEach(doc =>{
-											console.log('notif uid' + doc.id)
-											result.push(doc.data())
-											i++;
-											console.log(i);
-											if(i==size) {
-													console.log(result);
-													res.send(result);	
-											}
-											console.log('inside QS')
-							})
-							
-					}
-					else{
-							console.log("Empty notification bar")
-							res.send([]); // no notifications inside notifs
-					}
-			})
-*/
+
+app.post("/deletepayee", isLoggedIn, (req,res) => {
+	console.log(req.body.paydel2)
+	
+	db.collection('users').doc(req.session.user.uid).collection('payees').doc(req.body.paydel2).delete().then(function() {
+		res.redirect('/transfer')
+	})
+})
 
 app.post("/signupsubmit", function (req,res) {
   admin.auth().createUser({
