@@ -9,10 +9,18 @@
                         <div class="card-content white-text">
                           <span class="card-title">Home Loan</span>
                           <p>Please note that the rates offered by the bank varies with respect to the duration of your loan</p>
-                          <form method="POST" action="/HLapply">
+                          <form id="HLform" method="POST" action="/HLapply">
                                 <input name="principle" type="number" placeholder="Principle">
-                                <input name="time" type="number" placeholder="time">
-                                <button class="btn" type="Submit" style="backgound-colour : #607D8B">Submit</button>
+                                <input name="time" type="number" placeholder="Duration in number of years">
+                                <label>The rate will be computed by the system automatically.<br>
+                                    <ul>
+                                        <li>Time:0-2 rate:5%</li>
+                                        <li>Time:2-4 rate:7%</li>
+                                        <li>Time:4+ rate:10%</li>
+                                    </ul>
+                                </label>
+                                <input id="HLrate" class="hide" name="rate" type="number" placeholder="Rate">
+                                <button class="btn" onclick="rate()" style="backgound-colour : #607D8B">Submit</button>
                             </form>
                         
                         </div>
@@ -27,5 +35,23 @@
 <%}%>
 
 
+<script>
 
+    function rate(){
+        var time =  document.getElementsByName("time").value;
+        var rate = 0;
+        var formRef = document.getElementsByClassName("form");
+        if(time > 0 && time <=2){
+            rate = 5;
+        }
+        else if(time > 2 && time <=4 ){
+            rate = 7;
+        }
+        else if(time > 4){
+            rate = 10;
+        }
+        document.getElementById("HLrate").value = int(rate);
+        document.getElementById("HLform").submit();
+    }
+</script>
 <% include foot.ejs %>

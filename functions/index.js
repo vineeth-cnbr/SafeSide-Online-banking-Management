@@ -298,7 +298,8 @@ app.get('/HL', (req,res)=>{
 			data1 = {
 				status: false,
 				principle : 0,
-				time : 0
+				time : 0,
+				rate : 0
 			}
 		}
 		res.render("HomeLoan.ejs", {data1});
@@ -309,11 +310,14 @@ app.get('/HL', (req,res)=>{
 app.post('/HLapply', (req,res)=>{
 	var principle = req.body.principle;
 	var time = req.body.time;
+	var rate = req.body.rate;
+	console.log(rate)
 	db.collection('users').doc(req.session.uid).update({
 		HL : {
 			status : true,
 			principle : principle,
-			time : time 
+			time : time,
+			rate : rate
 		}
 	})
 	.then(()=>{
