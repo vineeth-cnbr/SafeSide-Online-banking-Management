@@ -11,7 +11,7 @@
                           <p>Please note that the rates offered by the bank varies with respect to the duration of your loan</p>
                           <form id="HLform" method="POST" action="/HLapply">
                                 <input name="principle" type="number" placeholder="Principle">
-                                <input name="time" type="number" placeholder="Duration in number of years">
+                                <input id="time" name="time" type="number" placeholder="Duration in number of years">
                                 <label>The rate will be computed by the system automatically.<br>
                                     <ul>
                                         <li>Time:0-2 rate:5%</li>
@@ -20,8 +20,9 @@
                                     </ul>
                                 </label>
                                 <input id="HLrate" class="hide" name="rate" type="number" placeholder="Rate">
-                                <button class="btn" onclick="rate()" style="backgound-colour : #607D8B">Submit</button>
                             </form>
+                            <button class="btn" onclick="rate()" style="backgound-colour : #607D8B">Submit</button>
+
                         
                         </div>
                     </div>
@@ -31,16 +32,27 @@
 <% } %>
 
 <%if(data1.status == true) { %>
-<h1><%= data1.status%>  <%=data1.principle%>  <%=data1.rate%></h1>
-<%}%>
+    <h3><b>Your Home Loan details.</b></h3>
+    <p>Principle : <%= data1.principle %>
+        <br>Rate : <%=data1.rate %> 
+        <br>Duration : <%=data1.time%> 
+        <br> Monthly Dues : <%=data1.due%>
+        <p id="dueDate"></p> 
+    </p>
+
+    <%}%>
 
 
 <script>
-
+    var date  = new Date();
+    var todayMonth = date.getMonth();
+    var dueDate = new Date((new Date(date.getFullYear(), todayMonth+1,1))-1)
+    document.getElementById("dueDate").innerHTML = ("Due date : "+ dueDate);
     function rate(){
-        var time =  document.getElementsByName("time").value;
+        
+        var time =  document.getElementById("time").value;
         var rate = 0;
-        var formRef = document.getElementsByClassName("form");
+        
         if(time > 0 && time <=2){
             rate = 5;
         }
@@ -50,7 +62,8 @@
         else if(time > 4){
             rate = 10;
         }
-        document.getElementById("HLrate").value = int(rate);
+        document.getElementById("HLrate").value = rate;
+        //window.alert(document.getElementById("time").value + "  "+time+ " " +rate);
         document.getElementById("HLform").submit();
     }
 </script>

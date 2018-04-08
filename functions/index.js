@@ -335,7 +335,7 @@ app.get('/HL', (req,res)=>{
 	console.log(req.session.uid);
 	db.collection('users').doc(req.session.uid).get()
 	.then((data) => {
-		var data1 = data.data().HL;
+		var data1 = data.data().HL.status;
 		console.log(data1);
 		console.log("Inside .then");
 		if(data1 == null){
@@ -345,23 +345,29 @@ app.get('/HL', (req,res)=>{
 				time : 0,
 				rate : 0
 			}
+		}else {
+			data1 = data.data().HL;
 		}
 		res.render("HomeLoan.ejs", {data1});
 	})
-	.catch(() =>{console.log('error');})
+	.catch((err) =>{console.log(err);res.send(err);})
 })
 
 app.post('/HLapply', (req,res)=>{
-	var principle = req.body.principle;
-	var time = req.body.time;
-	var rate = req.body.rate;
-	console.log(rate)
+	var principle = Number(req.body.principle);
+	var time = Number(req.body.time);
+	var rate = Number(req.body.rate);
+	console.log("The rate : ",rate);
+	var totalAmount = principle + rate*principle;
+	var monthlydue = totalAmount/time;
 	db.collection('users').doc(req.session.uid).update({
 		HL : {
 			status : true,
 			principle : principle,
 			time : time,
-			rate : rate
+			rate : rate,
+			due : monthlydue,
+			total : totalAmount
 		}
 	})
 	.then(()=>{

@@ -47,7 +47,8 @@ function signup() {
 							HL : {
 								status : false,
 								principle : 0,
-								time : 0
+								time : 0,
+								rate : 0
 							}
 						})
 						var up = bank.data().size+1;
@@ -99,6 +100,7 @@ function signup() {
 				Materialize.toast("Something went wrong. Try again!",4000);		
 				
 			}
+			window.location.assign('/');
 		  // ...
 	});
 }
