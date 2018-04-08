@@ -69,6 +69,50 @@ app.get('/current', isLoggedIn, (req, res) => {
 	res.render('current.ejs');
 });
 
+app.post('/savingsbalance', (req,res) => {
+	db.collection('users').doc(req.session.uid).get().then(function(users) {
+		req.session.users = users.data();
+		console.log(req.session.users);
+		var oldbalance = users.data().savings.balance;
+		console.log(oldbalance);
+		var newBalance = Number(oldbalance) + Number(req.body.amount)
+					console.log(newBalance);
+					return db.collection('users').doc(users.data().uid).update({
+						savings: {
+							balance: newBalance,
+							valid: true
+						}
+					})
+	}).then(function() {
+					res.redirect('/savings');
+	}).catch(function(err) {
+		console.log(err);
+		res.send(err);
+	})
+});
+
+app.post('/currentbalance', (req,res) => {
+	db.collection('users').doc(req.session.uid).get().then(function(users) {
+		req.session.users = users.data();
+		console.log(req.session.users);
+		var oldbalance = users.data().current.balance;
+		console.log(oldbalance);
+		var newBalance = Number(oldbalance) + Number(req.body.amount)
+					console.log(newBalance);
+					return db.collection('users').doc(users.data().uid).update({
+						current: {
+							balance: newBalance,
+							valid: true
+						}
+					})
+	}).then(function() {
+					res.redirect('/current');
+	}).catch(function(err) {
+		console.log(err);
+		res.send(err);
+	})
+});
+
 app.post('/transferfund', (req,res) => {
 	
 	db.collection('users').doc(req.session.uid).get().then(function(user) {
