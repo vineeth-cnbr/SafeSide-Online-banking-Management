@@ -1,0 +1,25 @@
+<% include nav.ejs %>
+<div class="row"></div>
+<div class="row">
+        <div class="row">
+            <h4 class="col s8">All Transactions</h4>
+        </div>
+        <div class="row">
+            <ul class="collapsible" data-collapsible="accordion">
+              <%  if(data.length==0) {%>
+                    <li><div class="collapsible-header"> No Transactions Made yet</div></li>
+              <%  }%>
+            <% for(var i=0;i<data.length;i++) { %>
+                
+                        <li>
+                          <div class="collapsible-header"><i class="material-icons">local_atm</i><%= data[i].title %></div>
+                          <div class="collapsible-body"><span><%=data[i].message%></span></div>
+                        </li>
+               
+            <% } %>
+            </ul>
+                        
+
+        </div>
+</div>
+<% include foot.ejs %>

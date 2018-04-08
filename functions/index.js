@@ -82,14 +82,24 @@ app.post('/savingsbalance', (req,res) => {
 		console.log(oldbalance);
 		var newBalance = Number(oldbalance) + Number(req.body.amount)
 					console.log(newBalance);
-					return db.collection('users').doc(users.data().uid).update({
+					var notifRef = db.collection('users').doc(users.data().uid).collection('notifs').doc();
+					var transRef = db.collection('users').doc(users.data().uid).collection('transactions').doc()
+					return Promise.all([db.collection('users').doc(users.data().uid).update({
 						savings: {
 							balance: newBalance,
 							valid: true
 						}
-					})
+					}),notifRef.set({
+						id: notifRef.id,
+						read: false,
+						title: '₹'+req.body.amount + ' deposit',
+						message: 'You deposited ₹'+req.body.amount + ' into your savings account'
+					}),transRef.set({
+						title: '₹'+req.body.amount + ' deposit',
+						message: 'You deposited ₹'+req.body.amount + ' into your savings account'
+					})]);
 	}).then(function() {
-					res.redirect('/savings');
+		res.redirect('/savings');
 	}).catch(function(err) {
 		console.log(err);
 		res.send(err);
@@ -104,14 +114,24 @@ app.post('/currentbalance', (req,res) => {
 		console.log(oldbalance);
 		var newBalance = Number(oldbalance) + Number(req.body.amount)
 					console.log(newBalance);
-					return db.collection('users').doc(users.data().uid).update({
+					var notifRef = db.collection('users').doc(users.data().uid).collection('notifs').doc();
+					var transRef = db.collection('users').doc(users.data().uid).collection('transactions').doc()
+					return Promise.all([db.collection('users').doc(users.data().uid).update({
 						current: {
 							balance: newBalance,
 							valid: true
 						}
-					})
+					}),notifRef.set({
+						id: notifRef.id,
+						read: false,
+						title: '₹'+req.body.amount + ' deposit',
+						message: 'You deposited ₹'+req.body.amount + ' into your current account'
+					}),transRef.set({
+						title: '₹'+req.body.amount + ' deposit',
+						message: 'You deposited ₹'+req.body.amount + ' into your current account'
+					})]);
 	}).then(function() {
-					res.redirect('/current');
+		res.redirect('/current');
 	}).catch(function(err) {
 		console.log(err);
 		res.send(err);
@@ -120,12 +140,25 @@ app.post('/currentbalance', (req,res) => {
 
 app.post('/transferfund', (req,res) => {
 	
+	console.log(req.body.typeAcc,typeof(req.body.typeAcc));
+	var accType = Number(req.body.typeAcc);
+	var acno = req.body.acno;
+	var amount = req.body.amount;
+	console.log(accType,typeof(accType));
 	db.collection('users').doc(req.session.uid).get().then(function(user) {
 		req.session.user = user.data();
-		if(user.data().savings.balance>=req.body.amount) {
-			return ;
+		if(accType = 1) {
+			if(user.data().savings.balance>=req.body.amount) {
+				return ;
+			}else {
+				res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
+			}
 		}else {
-			res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
+			if(user.data().current.balance>=req.body.amount) {
+				return ;
+			}else {
+				res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
+			}
 		}
 	}).then(function() {
 		return db.collection('users').get()
@@ -135,30 +168,95 @@ app.post('/transferfund', (req,res) => {
 				console.log("account Number,& acno",user.data().accountNo,req.body.acno)
 				if(user.data().accountNo == req.body.acno) {
 					console.log("Correct Account Number User", user.data());
-					var oldbalance = user.data().savings.balance;
+					if (accType == 1) {
+						var oldbalance = user.data().savings.balance;
+					}else  {
+						var oldbalance = user.data().current.balance;
+					}
 					console.log("Old Balance and body amount",oldbalance, req.body.amount)
 					var newBalance = Number(oldbalance) + Number(req.body.amount)
 					console.log(newBalance);
-					return db.collection('users').doc(user.data().uid).update({
-						savings: {
-							balance: newBalance
-						}
-					})		
+					if (accType == 1) {
+						return db.collection('users').doc(user.data().uid).update({
+							savings: {
+								balance: newBalance
+							}
+						})	
+					}else  {
+						return db.collection('users').doc(user.data().uid).update({
+							current: {
+								balance: newBalance
+							}
+						})	
+					}
+						
 				}	
 			})
 	
 	}).then(function() {
 		console.log("updated balance");
-		var oldBalance = req.session.user.savings.balance;
-		var newBalance = oldBalance - 100;
-		return db.collection('users').doc(req.session.user.uid).update({
-			savings: {
-				balance: newBalance
-			}
-		})
+		if (accType == 1) {
+			var oldBalance = req.session.user.savings.balance;
+			var newBalance = oldBalance - req.body.amount;
+			return db.collection('users').doc(req.session.user.uid).update({
+				savings: {
+					balance: newBalance
+				}
+			})
+		}else  {
+			var oldBalance = req.session.user.current.balance;
+			var newBalance = oldBalance - req.body.amount;
+			return db.collection('users').doc(req.session.user.uid).update({
+				current: {
+					balance: newBalance
+				}
+			})
+		}
+		
+		
+	}).then(function() {
+		//added to transactions collecions of user 
+		console.log("Transaction added");
+		var notifRef = db.collection('users').doc(req.session.user.uid).collection('notifs').doc();
+		return Promise.all([db.collection('users').doc(req.session.user.uid).collection('transactions').doc().set({
+			title: '₹'+amount + ' paid to ' + acno,
+			message: "Transaction of ₹" + amount + ' done to payee with account number ' + acno
+		}),notifRef.set({
+			id: notifRef.id,
+			title: amount + 'paid to ' + acno,
+			message: "Transaction of ₹" + amount + ' done to payee with account number ' + acno,
+			read: false
+		})]);
+		
+		
+	}).then(function() {
+		//added transactions collections of payee
+		console.log("Querying users")
+		var citiesRef = db.collection('users');
+		var queryRef = citiesRef.where('accountNo', '==', acno);
+		return queryRef.get()
+		
+	
+	}).then(function(obj) {
+		obj.forEach(function(payee) {
+			console.log("payee found",payee.data());
+			var notifRef = db.collection('users').doc(payee.data().uid).collection('notifs').doc();
+			return Promise.all([db.collection('users').doc(payee.data().uid).collection('transactions').doc().set({
+				title: amount + ' Recieved from ' + req.session.user.uid,
+				message: "Transaction of ₹" + amount + ' Recieved from ' + req.session.user.name
+			}),notifRef.set({
+				id: notifRef.id,
+				read: false,
+				title: amount + ' Recieved from ' + req.session.user.uid,
+				message: "Transaction of ₹" + amount + ' Recieved from ' + req.session.user.name
+			})]) ;
+		});
+		return 
+		
+	}).then(function() {
+		return 
 	}).then(function() {
 		res.redirect('/transfer');
-		
 	}).catch(function(err) {
 		console.log(err);
 		res.send(err);
@@ -192,6 +290,26 @@ app.get('/transfer',isLoggedIn, (req, res) => {
 		}
 })
 });
+
+app.get("/transactions", isLoggedIn, (req, res) => {
+	var trans = []
+	var i=0;
+	db.collection('users').doc(req.session.user.uid).collection('transactions').get().then(function(me) {
+		var size = me.size;
+		if(me.size ==0) {
+			return 
+		}
+		me.forEach(function(m) {
+			trans.push(m.data());
+			i++;
+			if(i==size) {
+				return
+			}
+		})
+	}).then(function() {
+		res.render('transactions',{data: trans})
+	});
+})
 
 
 
