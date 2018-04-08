@@ -65,6 +65,11 @@ app.get('/savings', isLoggedIn, (req, res) => {
 	res.render('savings.ejs');
 });
 
+app.get('/credit', isLoggedIn, (req, res) => { 
+	res.render('creditcard.ejs');
+});
+
+
 app.get('/current', isLoggedIn, (req, res) => { 
 	res.render('current.ejs');
 });
