@@ -294,6 +294,13 @@ app.get('/HL', (req,res)=>{
 		var data1 = data.data().HL;
 		console.log(data1);
 		console.log("Inside .then");
+		if(data1 == null){
+			data1 = {
+				status: false,
+				principle : 0,
+				time : 0
+			}
+		}
 		res.render("HomeLoan.ejs", {data1});
 	})
 	.catch(() =>{console.log('error');})
