@@ -27,6 +27,7 @@ function signup() {
 						}
 						custNo+=bank.data().size.toString();
 						var now = new Date();
+						var duedate = new Date((new Date(now.getFullYear(), now.getMonth()+1,1))-1)
 						db.collection('users').doc(user.uid).set( {
 							accountNo: bank.data().bankCode + custNo,   
 							Name: name,
@@ -43,8 +44,8 @@ function signup() {
 								balance: 0
 							},
 							CC: {
-								status: false,
-								due : 0
+								duedate: duedate,
+								bill: 0
 							},
 							HL : {
 								status : false,

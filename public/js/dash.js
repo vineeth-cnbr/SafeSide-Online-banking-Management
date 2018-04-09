@@ -172,15 +172,15 @@ firebase.auth().onAuthStateChanged(function(user) {
             document.getElementById("load").className =
                 document.getElementById("load").className.replace(/\bprogress\b/,'');
             console.log(doc.data());
+            document.getElementById('name-nav').innerHTML = doc.data().Name;
+            document.getElementById('email-nav').innerHTML = doc.data().email;
             document.getElementById('username-nav').innerHTML = 'Hello ' + doc.data().Name;
-            document.getElementById('balance-nav').innerHTML = '  Current Balance: ' + doc.data().current.balance;
+            document.getElementById('balance-nav').innerHTML = 'Savings Balance: ' + doc.data().savings.balance + '   Current Balance: ' + doc.data().current.balance;
             if(user.emailVerified) {
                 document.getElementById('email-verify').innerHTML = 'Your email is verified. You can acess bank account functions';
             }else {
                 document.getElementById('email-verify').innerHTML = 'Your email is <b>not</b> verified. You can not access account functions';           
             }
-            document.getElementById('name-nav').innerHTML = doc.data().Name;
-            document.getElementById('email-nav').innerHTML = doc.data().email;
             
         });
     } else {

@@ -66,7 +66,10 @@ app.get('/savings', isLoggedIn, (req, res) => {
 });
 
 app.get('/credit', isLoggedIn, (req, res) => { 
-	res.render('creditcard.ejs');
+	db.collection('users').doc(req.session.user.uid).get().then(function(user) {
+		res.render('creditcard.ejs',{data:user.data()});
+	})
+	
 });
 
 
@@ -111,8 +114,13 @@ app.post('/savingsbalance', (req,res) => {
 
 app.post('/creditpayment' , (req,res) =>{
 	var accType = Number(req.body.typeAcc);
-	var bill = 60; //vineet this I have assumed
+	var duedate;
+
+	//var bill = 60; //vineet this I have assumed
 	db.collection('users').doc(req.session.uid).get().then(function(users) {
+		var bill = users.data().CC.bill;
+		duedate = users.data().CC.duedate;
+		console.log(duedate);
 		if (accType == 1) {
 			var bal = users.data().savings.balance;
 		}else  {
@@ -139,6 +147,17 @@ app.post('/creditpayment' , (req,res) =>{
 			}
 		}
 
+	}).then(function() {
+		var now = new Date();
+		console.log(duedate);
+		var nextMonth = new Date((new Date(duedate.getFullYear(), duedate.getMonth()+2,1))-1)
+		return db.collection('users').doc(req.session.user.uid).update( {
+			CC: {
+				duedate: nextMonth,
+				bill:0
+			}
+		})
+		
 	}).then(function() {
 		res.redirect('/credit');
 	}).catch(function(err) {
@@ -190,7 +209,7 @@ app.post('/transferfund', (req,res) => {
 	db.collection('users').doc(req.session.uid).get().then(function(user) {
 		req.session.user = user.data();
 		if(accType = 1) {
-			if(user.data().savings.balance>=req.body.amount) {
+			if(user.data().savings.balance>=req.body.amount && accType!=3) {
 				return ;
 			}else {
 				res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
@@ -262,9 +281,11 @@ app.post('/transferfund', (req,res) => {
 			})
 		}else {
 			console.log("credit card add bill")
+			
 			return db.collection('users').doc(req.session.user.uid).update({
 				CC: {
-					due: Number(req.session.user.CC.due) + Number(req.body.amount),
+					bill: Number(req.session.user.CC.bill) + Number(req.body.amount),
+					duedate: req.session.user.CC.duedate
 				}
 			})
 		}
