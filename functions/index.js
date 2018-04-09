@@ -332,6 +332,7 @@ app.get('/notif', (req, res) => {
 })
 
 app.get('/HL', (req,res)=>{
+
 	console.log(req.session.uid);
 	db.collection('users').doc(req.session.uid).get()
 	.then((data) => {
@@ -354,6 +355,9 @@ app.get('/HL', (req,res)=>{
 })
 
 app.post('/HLapply', (req,res)=>{
+	var date  = new Date();
+    var todayMonth = date.getMonth();
+    var dueDate = new Date((new Date(date.getFullYear(), todayMonth+1,1))-1)
 	var principle = Number(req.body.principle);
 	var time = Number(req.body.time);
 	var rate = Number(req.body.rate);
@@ -367,12 +371,75 @@ app.post('/HLapply', (req,res)=>{
 			time : time,
 			rate : rate,
 			due : monthlydue,
-			total : totalAmount
+			total : totalAmount,
+			date : dueDate
 		}
 	})
 	.then(()=>{
 		res.redirect('/HL');
 	})
+})
+
+app.post("/HLpayment", (req,res)=>{
+	var due = req.body.due;
+	var date  = new Date();
+    var todayMonth = date.getMonth();
+    var dueDate = new Date((new Date(date.getFullYear(), todayMonth+2,1))-1)
+	var docRef = db.collection('users').doc(req.session.uid);
+	var newBalance = Number(0);
+	var balance = docRef.get()
+	.then((data) => {
+		
+		
+			console.log(due);
+			if(Number(req.body.opt) == 2){
+				if(Number(data.data().current.balance)>=Number(req.body.due)) {
+					newBalance = data.data().current.balance;
+					newBalance = newBalance - req.body.due;
+					console.log(newBalance);
+					docRef.update({
+						current : {
+							balance:newBalance,
+							valid:true
+						},
+						HL : {
+							status : true,
+							principle : data.data().HL.principle,
+							time : data.data().HL.time,
+							rate : data.data().HL.rate,
+							due : data.data().HL.due,
+							total : data.data().HL.total,
+							date : dueDate
+						}
+					}).then(()=>{res.redirect('/HL')})
+				}
+		}
+		else if(Number(req.body.opt) == 1){
+			if(Number(data.data().savings.balance)>=Number(req.body.due)) {
+				newBalance = data.data().savings.balance;
+				newBalance = newBalance - req.body.due;
+				console.log(newBalance);
+				docRef.update({
+					savings : {
+						balance:newBalance
+					},
+					HL : {
+						status : true,
+						principle : data.data().HL.principle,
+						time : data.data().HL.time,
+						rate : data.data().HL.rate,
+						due : data.data().HL.due,
+						total : data.data().HL.total,
+						date : dueDate
+					}
+				}).then(()=>{res.redirect('/HL')})
+			}
+	}else {
+			res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
+		}
+	})
+	
+	
 })
 
 

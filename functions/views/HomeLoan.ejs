@@ -37,8 +37,21 @@
         <br>Rate : <%=data1.rate %> 
         <br>Duration : <%=data1.time%> 
         <br> Monthly Dues : <%=data1.due%>
-        <p id="dueDate"></p> 
+        <br> Your next payment is due on : <%=data1.date%>
     </p>
+        <form action="/HLpayment" method="POST">
+            <div class="input-field col s12">
+                <input class="hide" type="number" name="due" value="<%=data1.due%>">
+                <select name="opt">
+                  <option value="" disabled selected>Payment Options</option>
+                  <option value="1">Savings</option>
+                  <option value="2">Current</option>
+                </select>
+                
+            </div>
+            <button class="btn" type="submit">Make payment</button>
+        </form>
+    
 
     <%}%>
 
