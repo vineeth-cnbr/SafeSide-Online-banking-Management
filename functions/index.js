@@ -82,6 +82,7 @@ app.post('/savingsbalance', (req,res) => {
 		console.log(oldbalance);
 		var newBalance = Number(oldbalance) + Number(req.body.amount)
 					console.log(newBalance);
+					var now = new Date();
 					var notifRef = db.collection('users').doc(users.data().uid).collection('notifs').doc();
 					var transRef = db.collection('users').doc(users.data().uid).collection('transactions').doc()
 					return Promise.all([db.collection('users').doc(users.data().uid).update({
@@ -90,11 +91,13 @@ app.post('/savingsbalance', (req,res) => {
 							valid: true
 						}
 					}),notifRef.set({
+						date: now,
 						id: notifRef.id,
 						read: false,
 						title: '₹'+req.body.amount + ' deposit',
 						message: 'You deposited ₹'+req.body.amount + ' into your savings account'
 					}),transRef.set({
+						date: now,
 						title: '₹'+req.body.amount + ' deposit',
 						message: 'You deposited ₹'+req.body.amount + ' into your savings account'
 					})]);
@@ -182,19 +185,26 @@ app.post('/transferfund', (req,res) => {
 								balance: newBalance
 							}
 						})	
-					}else  {
+					}else if(accType == 2) {
 						return db.collection('users').doc(user.data().uid).update({
 							current: {
 								balance: newBalance
 							}
 						})	
+					}else {
+						return db.collection('users').doc(user.data().uid).update({
+							savings: {
+								balance: newBalance
+							}
+						})
 					}
 						
 				}	
 			})
 	
 	}).then(function() {
-		console.log("updated balance");
+		var accType = Number(req.body.typeAcc);	
+		console.log("updated balance",accType);
 		if (accType == 1) {
 			var oldBalance = req.session.user.savings.balance;
 			var newBalance = oldBalance - req.body.amount;
@@ -203,12 +213,19 @@ app.post('/transferfund', (req,res) => {
 					balance: newBalance
 				}
 			})
-		}else  {
+		}else if(accType == 2)  {
 			var oldBalance = req.session.user.current.balance;
 			var newBalance = oldBalance - req.body.amount;
 			return db.collection('users').doc(req.session.user.uid).update({
 				current: {
 					balance: newBalance
+				}
+			})
+		}else {
+			console.log("credit card add bill")
+			return db.collection('users').doc(req.session.user.uid).update({
+				CC: {
+					due: Number(req.session.user.CC.due) + Number(req.body.amount),
 				}
 			})
 		}
@@ -300,11 +317,11 @@ app.get('/transfer',isLoggedIn, (req, res) => {
 app.get("/transactions", isLoggedIn, (req, res) => {
 	var trans = []
 	var i=0;
-	if(req.query.f=='10') {
-		db.collection('users').doc(req.session.user.uid).collection('transactions').get().then(function(me) {
+	if(req.query.f=='all') {
+		db.collection('users').doc(req.session.user.uid).collection('transactions').orderBy('date','desc').get().then(function(me) {
 			var size = me.size;
 			if(me.size ==0) {
-				return 
+				return
 			}
 			me.forEach(function(m) {
 				trans.push(m.data());
@@ -317,12 +334,58 @@ app.get("/transactions", isLoggedIn, (req, res) => {
 			res.render('transactions',{data: trans})
 		});	
 	}else if(req.query.f=='month') {
-		res.send("last month");
+		var trans =[]
+		var query = db.collection('users').doc(req.session.user.uid).collection('transactions').orderBy('date','desc').get().then(function(t) {
+			var size = t.size;
+			i=0;
+			
+			var now = new Date();
+			if(size==0) {
+				return
+			}
+			t.forEach(function(tr) {	
+				i++;
+				if(tr.data().date.getMonth()==now.getMonth()) {
+					trans.push(tr.data());
+				}
+				if(i==size) {
+					return
+				}
+			})
+		}).then(function() {
+			res.render('transactions',{data:trans});
+		}).catch(function(err) {
+			res.send(err.toString());
+		})
+	}else if(req.query.from!='undefined'){
+		var fromDate = new Date(req.query.from);
+		var toDate = new Date(req.query.to);
+		console.log("Date Range: ",fromDate,'-',toDate);
+		arr = [];
+		var transactions = db.collection('users').doc(req.session.user.uid).collection('transactions')
+		transactions.where('date','>=',fromDate).orderBy('date','desc').limit(10).get().then(function(trans) {
+			var size = trans.size;
+			i=0;
+			if(trans.size ==0) {
+				return 
+			}
+			trans.forEach(function(m) {
+				arr.push(m.data());
+				i++;
+				if(i==size) {
+					return
+				}
+			})
+		}).then(function() {
+			res.render('transactions',{data: arr});
+		});
+	
 	}else {
 		var transactions = db.collection('users').doc(req.session.user.uid).collection('transactions')
 		transactions.orderBy('date','desc').limit(10).get().then(function(trans) {
 			console.log(trans);
 			var size = trans.size;
+			i=0;
 			transactions = []
 			if(trans.size ==0) {
 				return 
@@ -334,6 +397,7 @@ app.get("/transactions", isLoggedIn, (req, res) => {
 					return
 				}
 			})
+		}).then(function() {
 			res.render('transactions',{data: transactions})
 		}).catch(function(err) {
 			console.log(err);	

@@ -5,7 +5,7 @@
   }
   
   .carousel .carousel-item {
-    height: 140%;
+    height: 260%;
   }
   .pagination li.active {
     color: #607D8B;
@@ -25,7 +25,16 @@
     <div class="row">
     <ul class="collection">
         <% for(var i=0;i<result.length;i++) { %>
-        <li class="collection-item"><%= result[i].payeename %>&nbsp&nbsp<%=result[i].accnum%><a onclick="deletePayee('<%=result[i].accnum%>','<%= result[i].payeename %>')"><i style="color: red" class=" right material-icons">delete</i></a> <a onclick="movetostep2('<%=result[i].accnum%>','<%= result[i].payeename %>')"><i style="color: #607D8B" class=" right material-icons">chevron_right</i></a> </li>
+        <li class="collection-item avatar">
+            <span class="title"><%= result[i].payeename%> </span>
+            <p><%=result[i].accnum%> <br>
+               <%=result[i].bankname%><br>
+               <%=result[i].branchname%>
+            </p>
+            <a class="secondary-content" onclick="deletePayee('<%=result[i].accnum%>','<%= result[i].payeename %>')"><i style="color: red;padding-right: 50px;padding-top:50px" class=" right material-icons">delete</i></a> <a class="secondary-content"  onclick="movetostep2('<%=result[i].accnum%>','<%= result[i].payeename %>')"><i style="color: #607D8B;padding-top: 50px;" class=" right material-icons">chevron_right</i></a> 
+          </li>
+        
+       
         <% } %>
 
     </ul>
@@ -34,7 +43,7 @@
         <li class="waves-affect active"><a href="/transfer">1</a></li>
         <li class="waves-affect"><a href="/transfer">2</a></li>
         <li class="waves-affect"><a href="/transfer">3</a></li>
-        <li class="waves-effect"><a id="right" href="#!"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a id="right" href="/transfer"><i class="material-icons">chevron_right</i></a></li>
       </ul>
     
     </div>
@@ -55,6 +64,7 @@
         <select name="typeAcc">
           <option value="1">Savings</option>
           <option value="2">Current</option>
+          <option value="3">Credit Card</option>
         </select>
         <label>Choose Account Type:</label>
       </div>
