@@ -105,13 +105,7 @@ function deleteUser() {
                 else {
                     for(var i=0;i<data.length;i++) {
                         var theMessage = '';
-                        for(var j=0;j<data[i].message.length;j++) {
-                            if(j==50) {
-                                theMessage = data[i].message.substring(0,50) + '</br>';
-                                theMessage += data[i].message.substring(51,data[i].message.length);
-                            }
-                            //data[i].message = text_truncate(data[i].message,50);
-                        }
+                        theMessage = text_truncate(data[i].message,50);
                         if(data[i].read) {
                             var list = list + '<li style="background-color:#eee"><div class="row">\
                                             <div class="col s8">\
@@ -178,15 +172,15 @@ firebase.auth().onAuthStateChanged(function(user) {
             document.getElementById("load").className =
                 document.getElementById("load").className.replace(/\bprogress\b/,'');
             console.log(doc.data());
+            document.getElementById('name-nav').innerHTML = doc.data().Name;
+            document.getElementById('email-nav').innerHTML = doc.data().email;
             document.getElementById('username-nav').innerHTML = 'Hello ' + doc.data().Name;
-            document.getElementById('balance-nav').innerHTML = '  Current Balance: ' + doc.data().current.balance;
+            document.getElementById('balance-nav').innerHTML = 'Savings Balance: ' + doc.data().savings.balance + '   Current Balance: ' + doc.data().current.balance;
             if(user.emailVerified) {
                 document.getElementById('email-verify').innerHTML = 'Your email is verified. You can acess bank account functions';
             }else {
                 document.getElementById('email-verify').innerHTML = 'Your email is <b>not</b> verified. You can not access account functions';           
             }
-            document.getElementById('name-nav').innerHTML = doc.data().Name;
-            document.getElementById('email-nav').innerHTML = doc.data().email;
             
         });
     } else {
@@ -203,9 +197,13 @@ firebase.auth().onAuthStateChanged(function(user) {
     if (ending == null) {
       ending = '...';
     }
+    if(str!=undefined) {
     if (str.length > length) {
       return str.substring(0, length - ending.length) + ending;
     } else {
       return str;
+    }
+    }else {
+        return str
     }
   };
