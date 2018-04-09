@@ -5,6 +5,31 @@
             <h4 class="col s8">All Transactions</h4>
         </div>
         <div class="row">
+          <div class="col s3">
+            <button class="btn" href="/transactions?f=all">All Transactions</button>
+          </div>
+          <div class="col s2">
+            <a class="btn" href="/transaction?f=month" >Last Month</a>
+          </div>
+        </div>
+        <div class="row">
+          <form action="">
+          <div class="col s2">
+              <input id="from" name="date_of_birth" type="text" class="datepicker" placeholder="From">
+          </div>
+          <div class="col s2">
+              <input id="to" name="date_of_birth" type="text" class="datepicker" placeholder="To">
+          </div> 
+          <div class="col s3">               
+
+              <button class="btn" type="submit">date range</button>
+        </div>
+          </form>
+          </form>
+        
+        </div>
+
+        <div class="row">
             <ul class="collapsible" data-collapsible="accordion">
               <%  if(data.length==0) {%>
                     <li><div class="collapsible-header"> No Transactions Made yet</div></li>

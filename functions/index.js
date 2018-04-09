@@ -217,14 +217,20 @@ app.post('/transferfund', (req,res) => {
 	}).then(function() {
 		//added to transactions collecions of user 
 		console.log("Transaction added");
-		var notifRef = db.collection('users').doc(req.session.user.uid).collection('notifs').doc();
-		return Promise.all([db.collection('users').doc(req.session.user.uid).collection('transactions').doc().set({
+		var now = new Date();
+		
+		var notifRef = db.collection('users').doc(req.session.user.uid).collection('notifs').doc(now.getTime().toString());
+		console.log(now.toDateString());
+		return Promise.all([db.collection('users').doc(req.session.user.uid).collection('transactions').doc(now.getTime().toString()).set({
+			date: now,
 			title: '₹'+amount + ' paid to ' + acno,
-			message: "Transaction of ₹" + amount + ' done to payee with account number ' + acno
+			message: "Transaction of ₹" + amount + ' done to payee with account number ' + acno + ' on ' + now.toDateString(),
+
+			 
 		}),notifRef.set({
 			id: notifRef.id,
 			title: amount + 'paid to ' + acno,
-			message: "Transaction of ₹" + amount + ' done to payee with account number ' + acno,
+			message: "Transaction of ₹" + amount + ' done to payee with account number ' + acno + ' on ' + now.toDateString(),
 			read: false
 		})]);
 		
@@ -240,8 +246,10 @@ app.post('/transferfund', (req,res) => {
 	}).then(function(obj) {
 		obj.forEach(function(payee) {
 			console.log("payee found",payee.data());
+			var now = new Date();
 			var notifRef = db.collection('users').doc(payee.data().uid).collection('notifs').doc();
 			return Promise.all([db.collection('users').doc(payee.data().uid).collection('transactions').doc().set({
+				date: now,
 				title: amount + ' Recieved from ' + req.session.user.uid,
 				message: "Transaction of ₹" + amount + ' Recieved from ' + req.session.user.name
 			}),notifRef.set({
@@ -253,8 +261,6 @@ app.post('/transferfund', (req,res) => {
 		});
 		return 
 		
-	}).then(function() {
-		return 
 	}).then(function() {
 		res.redirect('/transfer');
 	}).catch(function(err) {
@@ -294,22 +300,49 @@ app.get('/transfer',isLoggedIn, (req, res) => {
 app.get("/transactions", isLoggedIn, (req, res) => {
 	var trans = []
 	var i=0;
-	db.collection('users').doc(req.session.user.uid).collection('transactions').get().then(function(me) {
-		var size = me.size;
-		if(me.size ==0) {
-			return 
-		}
-		me.forEach(function(m) {
-			trans.push(m.data());
-			i++;
-			if(i==size) {
-				return
+	if(req.query.f=='10') {
+		db.collection('users').doc(req.session.user.uid).collection('transactions').get().then(function(me) {
+			var size = me.size;
+			if(me.size ==0) {
+				return 
 			}
-		})
-	}).then(function() {
-		res.render('transactions',{data: trans})
-	});
-})
+			me.forEach(function(m) {
+				trans.push(m.data());
+				i++;
+				if(i==size) {
+					return
+				}
+			})
+		}).then(function() {
+			res.render('transactions',{data: trans})
+		});	
+	}else if(req.query.f=='month') {
+		res.send("last month");
+	}else {
+		var transactions = db.collection('users').doc(req.session.user.uid).collection('transactions')
+		transactions.orderBy('date','desc').limit(10).get().then(function(trans) {
+			console.log(trans);
+			var size = trans.size;
+			transactions = []
+			if(trans.size ==0) {
+				return 
+			}
+			trans.forEach(function(m) {
+				transactions.push(m.data());
+				i++;
+				if(i==size) {
+					return
+				}
+			})
+			res.render('transactions',{data: transactions})
+		}).catch(function(err) {
+			console.log(err);	
+			res.send(err);
+		});
+	}
+	
+});
+
 
 
 
@@ -524,8 +557,10 @@ app.post('/regComplaint', (req, res) => {
 	//console.log("Submit is working bruh :3")
 	var title = req.body.title;
 	var body = req.body.body;
+	var now = new Date();
 	var compRef = db.collection('users').doc(req.session.uid).collection('notifs').doc();
 			compRef.set( {
+					date: now.getDate().toString(),
 					title: 'Complaint Registered: ' +title,
 					message: 'Message body : '+body,
 					id: compRef.id,

@@ -26,12 +26,14 @@ function signup() {
 							custNo+='0'
 						}
 						custNo+=bank.data().size.toString();
+						var now = new Date();
 						db.collection('users').doc(user.uid).set( {
 							accountNo: bank.data().bankCode + custNo,   
 							Name: name,
 							uid: user.uid,
 							email: email,
 							DOB : date_of_birth,
+							dateOfCreation: now,
 							current: {
 								valid: false,
 								balance: 0,
@@ -62,11 +64,13 @@ function signup() {
 					
 				}).then(function() {
 					var refi = db.collection('users').doc(user.uid).collection('notifs').doc();
+					var now = new Date();
 					return refi.set({
+						date:now,
 						title: 'Email Confirmation',
-            message: 'An email has been sent to ' + user.email + '. Please verify to access account functions.',
-            id: refi.id,
-            read: false
+						message: 'An email has been sent to ' + user.email + '. Please verify to access account functions.',
+						id: refi.id,
+						read: false
 					});
 
 				

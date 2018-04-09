@@ -53,6 +53,20 @@
     });
     
     $('select').material_select();
+    $('.datepicker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 76, // Creates a dropdown of 15 years to control year,
+        today: 'Today',
+        clear: 'Clear',
+        close: 'Ok',
+        closeOnSelect: false, // Close upon selecting a date,
+        max:true
+      });
+      var $input1 = $('.datepicker').pickadate()
+      var picker1 = $input1.pickadate('picker');
+      picker1.set('select', '1980-01-01', { format: 'yyyy-mm-dd' });
+  
+
   });
 </script>
 <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
