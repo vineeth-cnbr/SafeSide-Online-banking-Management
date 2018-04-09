@@ -106,6 +106,45 @@ app.post('/savingsbalance', (req,res) => {
 	})
 });
 
+app.post('/creditpayment' , (req,res) =>{
+	var accType = Number(req.body.typeAcc);
+	var bill = 60; //vineet this I have assumed
+	db.collection('users').doc(req.session.uid).get().then(function(users) {
+		if (accType == 1) {
+			var bal = users.data().savings.balance;
+		}else  {
+			var bal = users.data().current.balance;
+		}
+		console.log(bal);
+		if(bill > bal){
+			res.send("You do not have sufficient balance in your account. Please go <a href=\"/credit\"> back</a> and add cash into your account to continue.");
+		}
+		else{
+			var newbal = bal - bill ; 
+			if (accType == 1) {
+				return db.collection('users').doc(users.data().uid).update({
+					savings: {
+						balance: newbal
+					}
+				})
+			}else  {
+				return db.collection('users').doc(users.data().uid).update({
+					current: {
+						balance: newbal
+					}
+				})
+			}
+		}
+
+	}).then(function() {
+		res.redirect('/credit');
+	}).catch(function(err) {
+		console.log(err);
+		res.send(err);
+	})
+
+});
+
 app.post('/currentbalance', (req,res) => {
 	db.collection('users').doc(req.session.uid).get().then(function(users) {
 		req.session.users = users.data();
