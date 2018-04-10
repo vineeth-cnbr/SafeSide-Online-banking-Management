@@ -428,7 +428,7 @@ app.get("/transactions", isLoggedIn, (req, res) => {
 		console.log("Date Range: ",fromDate,'-',toDate);
 		arr = [];
 		var transactions = db.collection('users').doc(req.session.user.uid).collection('transactions')
-		transactions.where('date','>=',fromDate).orderBy('date','desc').limit(10).get().then(function(trans) {
+		transactions.where('date','>=',fromDate).where('date','>=',toDate).orderBy('date','desc').get().then(function(trans) {
 			var size = trans.size;
 			i=0;
 			if(trans.size ==0) {

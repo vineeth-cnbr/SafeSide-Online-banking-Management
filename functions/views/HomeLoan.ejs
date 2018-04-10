@@ -10,8 +10,8 @@
                           <span class="card-title">Home Loan</span>
                           <p>Please note that the rates offered by the bank varies with respect to the duration of your loan</p>
                           <form id="HLform" method="POST" action="/HLapply">
-                                <input name="principle" type="number" placeholder="Principle">
-                                <input id="time" name="time" type="number" placeholder="Duration in number of years">
+                                <input name="principle" type="number" min="0" placeholder="Principle">
+                                <input id="time" name="time" type="number" min="0" placeholder="Duration in number of years">
                                 <label>The rate will be computed by the system automatically.<br>
                                     <ul>
                                         <li>Time:0-2 rate:5%</li>
