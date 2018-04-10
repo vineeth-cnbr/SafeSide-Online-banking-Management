@@ -10,6 +10,7 @@ var config = {
   firebase.initializeApp(config);
 var db = firebase.firestore();
 function signup() {
+	Materialize.toast("Please wait",10000);
 	var name = document.getElementById('name').value;
 	var email = document.getElementById('email').value;
 	var password = document.getElementById('signuppass').value;
@@ -96,16 +97,17 @@ function signup() {
 		  var errorCode = error.code;
 			if(errorCode=="auth/weak-password") {
 				Materialize.toast("Your password is weak",4000);	
+				window.location.assign('/');
 			}
 			else if(errorCode=="auth/email-already-in-use") {
-				Materialize.toast("The email is already in use",4000);		
+				Materialize.toast("The email is already in use",4000 );
+				//window.location.assign('/');		
 			}
 			else {
 				console.log(error);
 				Materialize.toast("Something went wrong. Try again!",4000);		
-				
+				//window.location.assign('/');	
 			}
-			window.location.assign('/');
 		  // ...
 	});
 }
@@ -159,6 +161,18 @@ function signout() {
 		// An error happened.
 		
 	});
+}
+
+function forgotpassword() {
+	var email = document.getElementById('loginuser').value;
+	console.log(email)
+	firebase.auth().sendPasswordResetEmail(email).then(function() {
+        console.log("Email sent.");
+        Materialize.toast("An Email  has been sent to you registered email id. Please visit the link and follow the instructions",10000);
+      }).catch(function(error) {
+		  console.log(error);
+        console.log("An error happened.");
+    });
 }
 
 firebase.auth().onAuthStateChanged(function(user) {

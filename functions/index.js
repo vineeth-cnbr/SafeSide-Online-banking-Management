@@ -117,8 +117,14 @@ app.post('/savingsbalance', (req,res) => {
 	})
 });
 
-app.post('/creditpayment' , (req,res) =>{
+app.post('/creditpayment' ,isLoggedIn, (req,res) =>{
 	var accType = Number(req.body.typeAcc);
+	var flag = false;
+	if(Number(req.session.user.CC.bill) <= 0 ) {
+		res.send("You cannot make a payment for zero balance.Go <a href=\"/credit\"> back</a>")
+	}else {
+
+	
 	var duedate;
 
 	//var bill = 60; //vineet this I have assumed
@@ -134,6 +140,8 @@ app.post('/creditpayment' , (req,res) =>{
 		console.log(bal);
 		if(bill > bal){
 			res.send("You do not have sufficient balance in your account. Please go <a href=\"/credit\"> back</a> and add cash into your account to continue.");
+			flag=true;
+			return
 		}
 		else{
 			var newbal = bal - bill ; 
@@ -153,6 +161,7 @@ app.post('/creditpayment' , (req,res) =>{
 		}
 
 	}).then(function() {
+		if(!flag) {
 		var now = new Date();
 		console.log(duedate);
 		var nextMonth = new Date((new Date(duedate.getFullYear(), duedate.getMonth()+2,1))-1)
@@ -162,6 +171,7 @@ app.post('/creditpayment' , (req,res) =>{
 				bill:0
 			}
 		})
+		}
 		
 	}).then(function() {
 		res.redirect('/credit');
@@ -169,7 +179,7 @@ app.post('/creditpayment' , (req,res) =>{
 		console.log(err);
 		res.send(err);
 	})
-
+}
 });
 
 app.post('/currentbalance', (req,res) => {
@@ -180,6 +190,7 @@ app.post('/currentbalance', (req,res) => {
 		console.log(oldbalance);
 		var newBalance = Number(oldbalance) + Number(req.body.amount)
 					console.log(newBalance);
+					var now  = new Date();
 					var notifRef = db.collection('users').doc(users.data().uid).collection('notifs').doc();
 					var transRef = db.collection('users').doc(users.data().uid).collection('transactions').doc()
 					return Promise.all([db.collection('users').doc(users.data().uid).update({
@@ -188,11 +199,13 @@ app.post('/currentbalance', (req,res) => {
 							valid: true
 						}
 					}),notifRef.set({
+						date: now,
 						id: notifRef.id,
 						read: false,
 						title: '₹'+req.body.amount + ' deposit',
 						message: 'You deposited ₹'+req.body.amount + ' into your current account'
 					}),transRef.set({
+						date: now,
 						title: '₹'+req.body.amount + ' deposit',
 						message: 'You deposited ₹'+req.body.amount + ' into your current account'
 					})]);
@@ -310,6 +323,7 @@ app.post('/transferfund', (req,res) => {
 
 			 
 		}),notifRef.set({
+			date: now,
 			id: notifRef.id,
 			title: amount + 'paid to ' + acno,
 			message: "Transaction of ₹" + amount + ' done to payee with account number ' + acno + ' on ' + now.toDateString(),
@@ -332,12 +346,12 @@ app.post('/transferfund', (req,res) => {
 			var notifRef = db.collection('users').doc(payee.data().uid).collection('notifs').doc();
 			return Promise.all([db.collection('users').doc(payee.data().uid).collection('transactions').doc().set({
 				date: now,
-				title: amount + ' Recieved from ' + req.session.user.uid,
+				title: amount + ' Recieved from ' + req.session.user.accountNo,
 				message: "Transaction of ₹" + amount + ' Recieved from ' + req.session.user.name
 			}),notifRef.set({
 				id: notifRef.id,
 				read: false,
-				title: amount + ' Recieved from ' + req.session.user.uid,
+				title: amount + ' Recieved from ' + req.session.user.accountNo,
 				message: "Transaction of ₹" + amount + ' Recieved from ' + req.session.user.name
 			})]) ;
 		});
