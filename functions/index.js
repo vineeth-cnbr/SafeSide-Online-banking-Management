@@ -218,7 +218,7 @@ app.post('/currentbalance', (req,res) => {
 });
 
 app.post('/transferfund', (req,res) => {
-	
+	var flag=false;
 	console.log(req.body.typeAcc,typeof(req.body.typeAcc));
 	var accType = Number(req.body.typeAcc);
 	var acno = req.body.acno;
@@ -228,20 +228,30 @@ app.post('/transferfund', (req,res) => {
 		req.session.user = user.data();
 		if(accType = 1) {
 			if(user.data().savings.balance>=req.body.amount && accType!=3) {
+				
 				return ;
 			}else {
+				flag=true;
 				res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
+				return
 			}
 		}else {
 			if(user.data().current.balance>=req.body.amount) {
 				return ;
 			}else {
 				res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
+				flag=true;
+				return ;
 			}
 		}
 	}).then(function() {
-		return db.collection('users').get()
+		if(!flag) {
+			return db.collection('users').get()
+		}else {
+			return;
+		}
 	}).then(function(users) {
+		if(!flag) {
 		console.log("All Users: ", users);
 			users.forEach(function(user) {
 				console.log("account Number,& acno",user.data().accountNo,req.body.acno)
@@ -277,8 +287,11 @@ app.post('/transferfund', (req,res) => {
 						
 				}	
 			})
-	
+		}else {
+			return;
+		}
 	}).then(function() {
+		if(!flag) {
 		var accType = Number(req.body.typeAcc);	
 		console.log("updated balance",accType);
 		if (accType == 1) {
@@ -308,10 +321,13 @@ app.post('/transferfund', (req,res) => {
 			})
 		}
 		
-		
+		}else {
+			return;
+		}
 	}).then(function() {
 		//added to transactions collecions of user 
 		console.log("Transaction added");
+		if(!flag) {
 		var now = new Date();
 		
 		var notifRef = db.collection('users').doc(req.session.user.uid).collection('notifs').doc(now.getTime().toString());
@@ -330,16 +346,22 @@ app.post('/transferfund', (req,res) => {
 			read: false
 		})]);
 		
-		
+		}else {
+			return ;
+		}
 	}).then(function() {
+		if(!flag) {
 		//added transactions collections of payee
 		console.log("Querying users")
 		var citiesRef = db.collection('users');
 		var queryRef = citiesRef.where('accountNo', '==', acno);
 		return queryRef.get()
-		
+		}else {
+			return;
+		}
 	
 	}).then(function(obj) {
+		if(!flag) {
 		obj.forEach(function(payee) {
 			console.log("payee found",payee.data());
 			var now = new Date();
@@ -355,7 +377,10 @@ app.post('/transferfund', (req,res) => {
 				message: "Transaction of ₹" + amount + ' Recieved from ' + req.session.user.name
 			})]) ;
 		});
-		return 
+		}else {
+		return
+		}
+	return;
 		
 	}).then(function() {
 		res.redirect('/transfer');
