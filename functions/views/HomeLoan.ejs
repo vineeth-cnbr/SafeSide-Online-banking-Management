@@ -42,7 +42,7 @@
         <form action="/HLpayment" method="POST">
             <div class="input-field col s12">
                 <input class="hide" type="number" name="due" value="<%=data1.due%>">
-                <select name="opt">
+                <select name="opt" required>
                   <option value="" disabled selected>Payment Options</option>
                   <option value="1">Savings</option>
                   <option value="2">Current</option>

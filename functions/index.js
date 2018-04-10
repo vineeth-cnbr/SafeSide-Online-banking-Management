@@ -28,7 +28,12 @@ app.set('view engine', 'ejs');
 
 function isLoggedIn(req, res, next) {
 	if(req.session.user) {
-		next()
+		db.collection('users').doc(req.session.user.uid).get().then(function(user) {
+			req.session.user = user.data();
+			console.log(user.data().HL.date);
+			console.log("User refreshed")
+			next();
+		})
 	}else {
 		res.send("please login to continue");
 	}
@@ -611,10 +616,10 @@ app.get('/notif', (req, res) => {
 			})
 })
 
-app.get('/HL', (req,res)=>{
+app.get('/HL',isLoggedIn, (req,res)=>{
 
 	console.log(req.session.uid);
-	db.collection('users').doc(req.session.uid).get()
+	db.collection('users').doc(req.session.user.uid).get()
 	.then((data) => {
 		var data1 = data.data().HL.status;
 		console.log(data1);
@@ -660,9 +665,9 @@ app.post('/HLapply', (req,res)=>{
 	})
 })
 
-app.post("/HLpayment", (req,res)=>{
+app.post("/HLpayment",isLoggedIn, (req,res)=>{
 	var due = req.body.due;
-	var date  = new Date();
+	var date  = req.session.user.HL.date;
     var todayMonth = date.getMonth();
     var dueDate = new Date((new Date(date.getFullYear(), todayMonth+2,1))-1)
 	var docRef = db.collection('users').doc(req.session.uid);
@@ -692,6 +697,8 @@ app.post("/HLpayment", (req,res)=>{
 							date : dueDate
 						}
 					}).then(()=>{res.redirect('/HL')})
+				}else {
+					res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
 				}
 		}
 		else if(Number(req.body.opt) == 1){
@@ -714,9 +721,10 @@ app.post("/HLpayment", (req,res)=>{
 					}
 				}).then(()=>{res.redirect('/HL')})
 			}
-	}else {
-			res.send("You do not have sufficient balance in your account. Please go <a href=\"/transfer\"> back</a> and add cash into your account to continue.")
-		}
+			else {
+				res.send("You do not have sufficient balance in your account. Please go <a href=\"/HL\"> back</a> and add cash into your account to continue.")
+			}
+	}
 	})
 	
 	

@@ -174,6 +174,7 @@ firebase.auth().onAuthStateChanged(function(user) {
             console.log(doc.data());
             document.getElementById('name-nav').innerHTML = doc.data().Name;
             document.getElementById('email-nav').innerHTML = doc.data().email;
+            document.getElementById('acc-nav').innerHTML = doc.data().accountNo;
             document.getElementById('username-nav').innerHTML = 'Hello ' + doc.data().Name;
             document.getElementById('balance-nav').innerHTML = 'Savings Balance: ' + doc.data().savings.balance + '   Current Balance: ' + doc.data().current.balance;
             if(user.emailVerified) {
