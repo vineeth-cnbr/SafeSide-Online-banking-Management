@@ -1,29 +1,55 @@
-# README #
+# SafeSide - Online Banking Management Application
 
-This README would normally document whatever steps are necessary to get your application up and running.
+SafeSide is an Online Banking Management System with a ton of features like Fund Transfer, Notification Alert System, and Services like Home loans, Credit Cards etc.
 
-### What is this repository for? ###
+## Getting Started
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+1. Create a Firebase Account and create a new Project. 
+2. Clone this repository.
+3. Open the terminal and enter the repository folder `cd SafeSide-Online-banking-Management`
+4. `cd functions`
+5. `npm install`
+6. `npm run start` will start the server on your system.
+7. Go to `locahost:8000`on your browser to view the application.
 
-### How do I get set up? ###
+### Prerequisites
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* NodeJS v6 or later.
 
-### Contribution guidelines ###
+## Running the tests
 
-* Writing tests
-* Code review
-* Other guidelines
+These will allow you to restart the sever everytime your save your changes on the js file. 
 
-### Who do I talk to? ###
+* `npm install -g nodemon`
+* `npm run test`
 
-* Repo owner or admin
-* Other community or team contactThis is prado's branch
+
+
+## Deployment
+
+1. This repository can be easily run on firebase using cloud functions. (visit this [tutorial](https://www.youtube.com/watch?v=vr0Gfvp5v1A) for futher explaination).
+2. This repository may also be hosted using firebase hosting. (Visit this [tutorial](https://www.youtube.com/watch?v=LOeioOKUKI8) for futher explaination)
+
+## Built With
+
+* Frontend:
+    [Materialize](http://www.materializecss.com/) Styling Framework.
+* Backend:
+    1. [Express](https://expressjs.com/)
+    2. [EJS](http://ejs.co/#docs)
+    3. [Cloud firestore](https://www.youtube.com/watch?v=2Vf1D-rUMwE)
+
+
+## Authors
+
+* **Vineeth Chandran** - Lead Developer - [vineeth-cnbr](https://github.com/vineeth-cnbr)
+
+
+* **Pradeep S** - Lead Developer - [Prado98](https://github.com/Prado98)
+
+See the list of [contributors](https://github.com/vineeth-cnbr/SafeSide-Online-banking-Management/graphs/contributors) who participated in this project.
+
+
+## Acknowledgments
+
+* Amrita University, for giving us this unoriginal idea for us to work on and wasting our previous time we could have used for developing nice beautiful apps. 
