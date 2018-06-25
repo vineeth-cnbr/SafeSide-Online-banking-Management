@@ -42,10 +42,16 @@ These will allow you to restart the sever everytime your save your changes on th
 
 ## Authors
 
+* **Vicky Sharma** - Scrum Master - [Vicky](https://github.com/vickysharma96)
+
+
 * **Vineeth Chandran** - Lead Developer - [vineeth-cnbr](https://github.com/vineeth-cnbr)
 
 
 * **Pradeep S** - Lead Developer - [Prado98](https://github.com/Prado98)
+
+* **Sachin C** - Tester - [Cat](https://github.com/dracosachin)
+
 
 See the list of [contributors](https://github.com/vineeth-cnbr/SafeSide-Online-banking-Management/graphs/contributors) who participated in this project.
 
